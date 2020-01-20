@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useCallback } from "react";
 import "./App.scss";
 import { useCommonMedia, DeviceType } from "./utils/customHooks";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { HeaderProps } from "./components/Header";
 
 const Sidebar = lazy(() => import("./components/Sidebar"));
 const Header = lazy(() => import("./components/Header"));
@@ -11,12 +12,13 @@ export interface AppRouteConfig {
   path: string;
   title: string;
   component: React.ReactNode;
+  theme?: HeaderProps["theme"];
 }
 
 const App: React.FC = () => {
   const mediaSize: DeviceType = useCommonMedia();
   const routes: Array<AppRouteConfig> = [
-    { path: "/home", title: "Home", component: <Home /> },
+    { path: "/home", title: "Home", component: <Home />, theme: "secondary" },
     {
       path: "/components",
       title: "Components",
@@ -122,7 +124,7 @@ const App: React.FC = () => {
               {routes.map((route: AppRouteConfig) => {
                 return (
                   <Route key={route.path} path={route.path}>
-                    <Header h1={route.title} />
+                    <Header d3={route.title} theme={route.theme} />
 
                     <div className="container-fluid">{route.component}</div>
                   </Route>
