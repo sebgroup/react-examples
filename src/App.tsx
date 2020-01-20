@@ -1,12 +1,29 @@
 import React, { lazy, Suspense, useCallback } from "react";
 import "./App.scss";
 import { useCommonMedia, DeviceType } from "./utils/customHooks";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 const Sidebar = lazy(() => import("./components/Sidebar"));
+const Header = lazy(() => import("./components/Header"));
 const Main = lazy(() => import("./components/Main"));
+
+export interface AppRouteConfig {
+  path: string;
+  title: string;
+  component: React.ReactNode;
+}
 
 const App: React.FC = () => {
   const mediaSize: DeviceType = useCommonMedia();
+  const routes: Array<AppRouteConfig> = [
+    { path: "/home", title: "Home", component: <Main /> },
+    {
+      path: "/components",
+      title: "Components",
+      component: <div>COMPONENTS</div>
+    },
+    { path: "/about", title: "About", component: <div>ABOUT</div> }
+  ];
 
   const gridAreas: () => string = useCallback(() => {
     switch (mediaSize) {
@@ -84,24 +101,39 @@ const App: React.FC = () => {
   return (
     // TODO: add global loader as Context
     // TODO: add global notifications as Context
-    <Suspense fallback={<div className="skeleton-loader"></div>}>
-      {/* TODO: Add proper fallback UI*/}
-      <div
-        className={"root-container "}
-        style={{
-          display: "grid",
-          gridTemplateRows: gridTemplate().rows,
-          gridTemplateColumns: gridTemplate().columns,
-          gridTemplateAreas: gridAreas()
-        }}
-      >
-        <Sidebar
-          mobile={mediaSize === "mobile" || mediaSize === "landscape-mobile"}
-          navItems={[1, 2, 3]}
-        />
-        <Main />
-      </div>
-    </Suspense>
+    <BrowserRouter>
+      <Suspense fallback={<div className="skeleton-loader"></div>}>
+        {/* TODO: Add proper fallback UI*/}
+        <div
+          className={"root-container "}
+          style={{
+            display: "grid",
+            gridTemplateRows: gridTemplate().rows,
+            gridTemplateColumns: gridTemplate().columns,
+            gridTemplateAreas: gridAreas()
+          }}
+        >
+          <Sidebar
+            mobile={mediaSize === "mobile" || mediaSize === "landscape-mobile"}
+            routes={routes}
+          />
+          <main style={{ gridArea: "main", overflowY: "auto" }}>
+            <Switch>
+              {routes.map((route: AppRouteConfig) => {
+                return (
+                  <Route path={route.path}>
+                    <Header h1={route.title} />
+
+                    <div className="container-fluid">{route.component}</div>
+                  </Route>
+                );
+              })}
+              <Redirect from="/" exact to="/home" />
+            </Switch>
+          </main>
+        </div>
+      </Suspense>
+    </BrowserRouter>
   );
 };
 
