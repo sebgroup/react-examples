@@ -5,7 +5,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 const Sidebar = lazy(() => import("./components/Sidebar"));
 const Header = lazy(() => import("./components/Header"));
-const Main = lazy(() => import("./components/Main"));
+const Home = lazy(() => import("./components/Home"));
 
 export interface AppRouteConfig {
   path: string;
@@ -16,7 +16,7 @@ export interface AppRouteConfig {
 const App: React.FC = () => {
   const mediaSize: DeviceType = useCommonMedia();
   const routes: Array<AppRouteConfig> = [
-    { path: "/home", title: "Home", component: <Main /> },
+    { path: "/home", title: "Home", component: <Home /> },
     {
       path: "/components",
       title: "Components",
@@ -121,14 +121,14 @@ const App: React.FC = () => {
             <Switch>
               {routes.map((route: AppRouteConfig) => {
                 return (
-                  <Route path={route.path}>
+                  <Route key={route.path} path={route.path}>
                     <Header h1={route.title} />
 
                     <div className="container-fluid">{route.component}</div>
                   </Route>
                 );
               })}
-              <Redirect from="/" exact to="/home" />
+              <Redirect from="/" exact to={routes[0].path} />
             </Switch>
           </main>
         </div>
