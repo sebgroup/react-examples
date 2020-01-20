@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import { AppRouteConfig } from "../App";
 
@@ -14,6 +14,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }: // style = {}
 SidebarProps) => {
   const [open, setOpen] = useState(false);
+  const toggleClickMenu = useCallback(() => setOpen(state => !state), []);
 
   return (
     <aside style={{ gridArea: "aside" }} className="bg-dark">
@@ -28,9 +29,10 @@ SidebarProps) => {
             aria-controls="navbarNav"
             aria-expanded="false"
             aria-label="Toggle navigation"
-            onClick={() => setOpen(state => !state)}
+            onClick={toggleClickMenu}
           >
             <span className="navbar-toggler-icon"></span>
+            {/* TODO: automatically close when anything else is clicked */}
           </button>
         ) : null}
       </nav>
@@ -59,6 +61,7 @@ SidebarProps) => {
                   className="nav-link text-light"
                   to={item.path}
                   activeClassName="active"
+                  onClick={toggleClickMenu}
                 >
                   {item.title}
                 </NavLink>

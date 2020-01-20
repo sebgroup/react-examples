@@ -26,34 +26,19 @@ const App: React.FC = () => {
     },
     { path: "/about", title: "About", component: <div>ABOUT</div> }
   ];
+  const sidebarHeaderHeight: number = 56;
 
   const gridAreas: () => string = useCallback(() => {
     switch (mediaSize) {
       case "mobile":
-        return `
-          'aside aside aside'
-          'main main main'
-        `;
       case "landscape-mobile":
         return `
           'aside aside aside'
           'main main main'
         `;
       case "tablet":
-        return `
-          'aside main main'
-          'aside main main'
-        `;
       case "desktop":
-        return `
-          'aside main main'
-          'aside main main'
-        `;
       case "wide-desktop":
-        return `
-          'aside main main'
-          'aside main main'
-        `;
       default:
         return `
           'aside main main'
@@ -68,28 +53,24 @@ const App: React.FC = () => {
   } = useCallback(() => {
     switch (mediaSize) {
       case "mobile":
-        return {
-          rows: "56px calc(100vh - 56px)",
-          columns: "auto auto auto"
-        };
       case "landscape-mobile":
         return {
-          rows: "56px calc(100vh - 56px)",
+          rows: `${sidebarHeaderHeight}px calc(100vh - ${sidebarHeaderHeight}px)`,
           columns: "auto auto auto"
         };
       case "tablet":
         return {
-          rows: "56px calc(100vh - 56px)",
+          rows: `${sidebarHeaderHeight}px calc(100vh - ${sidebarHeaderHeight}px)`,
           columns: "200px auto auto"
         };
       case "desktop":
         return {
-          rows: "56px calc(100vh - 56px)",
+          rows: `${sidebarHeaderHeight}px calc(100vh - ${sidebarHeaderHeight}px)`,
           columns: "250px auto auto"
         };
       case "wide-desktop":
         return {
-          rows: "56px calc(100vh - 56px)",
+          rows: `${sidebarHeaderHeight}px calc(100vh - ${sidebarHeaderHeight}px)`,
           columns: "300px auto auto"
         };
       default:
@@ -99,6 +80,8 @@ const App: React.FC = () => {
         };
     }
   }, [mediaSize]);
+
+  const { rows, columns } = gridTemplate();
 
   return (
     // TODO: add global loader as Context
@@ -110,8 +93,8 @@ const App: React.FC = () => {
           className={"root-container "}
           style={{
             display: "grid",
-            gridTemplateRows: gridTemplate().rows,
-            gridTemplateColumns: gridTemplate().columns,
+            gridTemplateRows: rows,
+            gridTemplateColumns: columns,
             gridTemplateAreas: gridAreas()
           }}
         >
