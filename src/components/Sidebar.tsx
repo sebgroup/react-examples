@@ -1,23 +1,27 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, memo } from "react";
 import { NavLink } from "react-router-dom";
 import { AppRouteConfig } from "../App";
 
 interface SidebarProps {
   routes: Array<AppRouteConfig>;
   mobile: boolean;
-  // style?: React.CSSProperties | undefined;
+  searchable: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   routes,
-  mobile
-}: // style = {}
-SidebarProps) => {
+  mobile,
+  searchable
+}: SidebarProps) => {
   const [open, setOpen] = useState(false);
   const toggleClickMenu = useCallback(() => setOpen(state => !state), []);
 
+  const Separator: React.FC<{ type: "mb" | "mt" | "my" }> = memo(({ type }) => (
+    <hr className={`m-0 ${type}-3`} />
+  ));
+
   return (
-    <aside style={{ gridArea: "aside" }} className="bg-dark">
+    <aside style={{ gridArea: "aside" }} className="bg-dark overflow-auto">
       <nav className="navbar navbar-dark bg-dark sidebar-header">
         <span className="navbar-brand">React starter</span>
         {mobile ? (
@@ -40,27 +44,29 @@ SidebarProps) => {
       <div
         className={`bg-dark ${mobile ? "w-100" : ""}`}
         style={{
-          position: mobile ? "fixed" : "relative",
-          overflowY: "hidden",
-          height: mobile && !open ? 0 : "auto"
+          position: mobile ? "absolute" : "relative",
+          overflowY: "auto",
+          height: mobile && !open ? 0 : "inherit"
         }}
       >
-        <hr className="m-0 mb-3" />
+        <Separator type="mb" />
 
-        <section className="sidebar-nav px-3">
-          <div>TODO: add search</div>
-        </section>
+        {searchable && (
+          <section className="sidebar-nav px-3">
+            <div>TODO: add search</div>
+          </section>
+        )}
 
-        <hr className="m-0 my-3" />
+        <Separator type="my" />
 
-        <section className="sidebar-nav overflow-auto">
-          <ul className="nav nav-pills my-0">
+        <section className="sidebar-nav">
+          <ul className="nav my-0">
             {routes.map((item: AppRouteConfig) => (
               <li key={item.path} className="nav-item text-center w-100">
                 <NavLink
                   className="nav-link text-light"
                   to={item.path}
-                  activeClassName="active"
+                  activeClassName="text-dark bg-secondary"
                   onClick={toggleClickMenu}
                 >
                   {item.title}
@@ -70,7 +76,7 @@ SidebarProps) => {
           </ul>
         </section>
 
-        <hr className="m-0 my-3" />
+        <Separator type="my" />
       </div>
     </aside>
   );
