@@ -46,7 +46,7 @@ const Home: React.FC = () => {
           ></Button>
           <div className="card-footer">
             <p className="card-text">
-              Adjust how many seconds should the global loader spin for.
+              Adjust how many seconds the global loader should spin for.
             </p>
             <Stepper
               className="card-link"
