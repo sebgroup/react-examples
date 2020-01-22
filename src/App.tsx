@@ -17,7 +17,7 @@ export interface AppRouteConfig {
 }
 
 const App: React.FC = () => {
-  const mediaSize: DeviceType = useCommonMedia();
+  const deviceSize: DeviceType = useCommonMedia();
 
   const routes: Array<AppRouteConfig> = [
     { path: "/home", title: "Home", component: <Home />, theme: "success" },
@@ -31,7 +31,7 @@ const App: React.FC = () => {
   const sidebarHeaderHeight: number = 56;
 
   const gridAreas: () => string = useCallback(() => {
-    switch (mediaSize) {
+    switch (deviceSize) {
       case "mobile":
       case "landscape-mobile":
         return `
@@ -44,10 +44,10 @@ const App: React.FC = () => {
           'aside main main'
         `;
     }
-  }, [mediaSize]);
+  }, [deviceSize]);
 
   const gridTemplateColumns: () => string = useCallback(() => {
-    switch (mediaSize) {
+    switch (deviceSize) {
       case "tablet":
         return "200px auto auto";
       case "desktop":
@@ -57,11 +57,11 @@ const App: React.FC = () => {
       default:
         return "auto auto auto";
     }
-  }, [mediaSize]);
+  }, [deviceSize]);
 
   const mobile: boolean = useMemo(
-    () => mediaSize === "mobile" || mediaSize === "landscape-mobile",
-    [mediaSize]
+    () => deviceSize === "mobile" || deviceSize === "landscape-mobile",
+    [deviceSize]
   );
 
   const rootContainerStyle = {
