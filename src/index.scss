@@ -14,9 +14,13 @@ code {
     monospace;
 }
 
+.seb-loader-wrapper.fullscreen.global-loader {
+  z-index: $zindex-tooltip;
+}
+
 .notifications-container {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: $zindex-tooltip;
+  z-index: $zindex-popover;
 }

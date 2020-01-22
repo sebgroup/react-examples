@@ -30,7 +30,7 @@ const LoaderProvider: React.FC = props => {
         toggleLoading
       }}
     >
-      <Loader toggle={loading} fullscreen />
+      <Loader className="global-loader" toggle={loading} fullscreen />
       {props.children}
     </LoaderContext.Provider>
   );
