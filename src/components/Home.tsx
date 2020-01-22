@@ -1,5 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { Button } from "@sebgroup/react-components/dist/Button";
+import { Dropdown } from "@sebgroup/react-components/dist/Dropdown";
+import {
+  DropdownItem,
+  DropdownChangeEvent
+} from "@sebgroup/react-components/dist/Dropdown/Dropdown";
 import { TextBox } from "@sebgroup/react-components/dist/TextBox";
 import { Stepper } from "@sebgroup/react-components/dist/Stepper";
 import {
@@ -9,16 +14,29 @@ import {
 import { useCommonMedia, DeviceType } from "../utils/customHooks";
 import {
   useNotificationsContext,
-  UseNotificationsContext
+  UseNotificationsContext,
+  Notification
 } from "../providers/NotificationsProvider";
 
 const Home: React.FC = () => {
   const deviceSize: DeviceType = useCommonMedia();
   const isLargeScreenSize: boolean = deviceSize === "wide-desktop";
   const [stepperValue, setStepperValue] = useState<number>(1);
-  const [notificationMessageValue, setNotificationMessageValue] = useState<
-    string
-  >("This is a test");
+  const [notificationType, setNotificationType] = useState<
+    DropdownItem<Notification["theme"]>
+  >({
+    label: "Warning",
+    value: "warning"
+  });
+  const [notificationTypeList] = useState<
+    DropdownItem<Notification["theme"]>[]
+  >([
+    { label: "Warning", value: "warning" },
+    { label: "Error", value: "danger" }
+  ]);
+  const [notificationMessage, setNotificationMessage] = useState<string>(
+    "This is a test"
+  );
   const [, toggleLoading]: UseLoaderContext = useLoaderContext();
   const [addNotification]: UseNotificationsContext = useNotificationsContext();
 
@@ -39,24 +57,30 @@ const Home: React.FC = () => {
 
   const onChangeNotificationMessage = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) =>
-      setNotificationMessageValue(event.target.value),
+      setNotificationMessage(event.target.value),
     []
   );
 
   const handleSendNotification = useCallback(
     () =>
       addNotification({
-        message: "Alert",
-        description: notificationMessageValue
+        message: notificationType.label,
+        description: notificationMessage,
+        theme: notificationType.value
       }),
-    [addNotification, notificationMessageValue]
+    [addNotification, notificationMessage, notificationType]
+  );
+
+  const handleChangeNotificationType = useCallback(
+    (item: DropdownChangeEvent) => setNotificationType(item as DropdownItem),
+    [setNotificationType]
   );
 
   return (
     <div className={isLargeScreenSize ? "card-columns" : ""}>
       <div className="card mb-3">
         <div className="card-body">
-          <h5 className="card-title">Loader</h5>
+          <h3 className="card-title">Loader</h3>
           <h6 className="card-subtitle mb-2 text-muted">
             Global application loader
           </h6>
@@ -89,7 +113,7 @@ const Home: React.FC = () => {
 
       <div className="card mb-3">
         <div className="card-body">
-          <h5 className="card-title">Notifications</h5>
+          <h3 className="card-title">Notifications</h3>
           <h6 className="card-subtitle mb-2 text-muted">
             Global application notifications
           </h6>
@@ -103,13 +127,19 @@ const Home: React.FC = () => {
             onClick={handleSendNotification}
           ></Button>
           <hr />
-          <p className="card-text">Adjust the notification message:</p>
+          <p className="card-text">Adjust the notification message and type:</p>
           <TextBox
             name="notificationMessage"
             className="card-link"
             label="Notification message:"
-            value={notificationMessageValue}
+            value={notificationMessage}
             onChange={onChangeNotificationMessage}
+          />
+          <Dropdown
+            label="Notification type:"
+            list={notificationTypeList}
+            onChange={handleChangeNotificationType}
+            selectedValue={notificationType}
           />
         </div>
       </div>
