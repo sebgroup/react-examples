@@ -44,20 +44,19 @@ const Home: React.FC = () => {
             label="Test global loader"
             onClick={() => testLoader(stepperValue)}
           ></Button>
-          <div className="card-footer">
-            <p className="card-text">
-              Adjust how many seconds the global loader should spin for.
-            </p>
-            <Stepper
-              className="card-link"
-              label="Seconds"
-              min={1}
-              max={10}
-              value={stepperValue}
-              onIncrease={increaseStepper}
-              onDecrease={decreaseStepper}
-            />
-          </div>
+          <hr />
+          <p className="card-text">
+            Adjust how many seconds the global loader should spin for:
+          </p>
+          <Stepper
+            className="card-link"
+            label="Seconds"
+            min={1}
+            max={10}
+            value={stepperValue}
+            onIncrease={increaseStepper}
+            onDecrease={decreaseStepper}
+          />
         </div>
       </div>
     </>
