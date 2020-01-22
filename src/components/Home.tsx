@@ -7,6 +7,10 @@ import {
   UseLoaderContext
 } from "../providers/LoaderProvider";
 import { useCommonMedia, DeviceType } from "../utils/customHooks";
+import {
+  useNotificationsContext,
+  UseNotificationsContext
+} from "../providers/NotificationsProvider";
 
 const Home: React.FC = () => {
   const deviceSize: DeviceType = useCommonMedia();
@@ -16,6 +20,7 @@ const Home: React.FC = () => {
     string
   >("This is a test");
   const [, toggleLoading]: UseLoaderContext = useLoaderContext();
+  const [addNotification]: UseNotificationsContext = useNotificationsContext();
 
   const testLoader = (seconds: number) => {
     toggleLoading();
@@ -36,6 +41,15 @@ const Home: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) =>
       setNotificationMessageValue(event.target.value),
     []
+  );
+
+  const handleSendNotification = useCallback(
+    () =>
+      addNotification({
+        message: "Alert",
+        description: notificationMessageValue
+      }),
+    [addNotification, notificationMessageValue]
   );
 
   return (
@@ -86,7 +100,7 @@ const Home: React.FC = () => {
           <Button
             className="card-link mb-3"
             label="Test notification"
-            onClick={() => console.log("// TODO: add notifications")}
+            onClick={handleSendNotification}
           ></Button>
           <hr />
           <p className="card-text">Adjust the notification message:</p>

@@ -6,6 +6,7 @@ import { HeaderProps } from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import LoaderProvider from "./providers/LoaderProvider";
+import NotificationsProvider from "./providers/NotificationsProvider";
 
 const Home = lazy(() => import("./components/Home"));
 
@@ -85,26 +86,31 @@ const App: React.FC = () => {
     // TODO: add global notifications as Context
     <BrowserRouter>
       <LoaderProvider>
-        <Suspense fallback={<AppLoading />}>
-          <div className={"root-container bg-light"} style={rootContainerStyle}>
-            <Sidebar mobile={mobile} routes={routes} searchable />
-            <main style={{ gridArea: "main", overflowY: "auto" }}>
-              <Switch>
-                {routes.map((route: AppRouteConfig) => {
-                  return (
-                    <Route key={route.path} path={route.path}>
-                      <Header d3={route.title} theme={route.theme} />
-                      {/* TODO: Add breadcrumbs */}
+        <NotificationsProvider>
+          <Suspense fallback={<AppLoading />}>
+            <div
+              className={"root-container bg-light"}
+              style={rootContainerStyle}
+            >
+              <Sidebar mobile={mobile} routes={routes} searchable />
+              <main style={{ gridArea: "main", overflowY: "auto" }}>
+                <Switch>
+                  {routes.map((route: AppRouteConfig) => {
+                    return (
+                      <Route key={route.path} path={route.path}>
+                        <Header d3={route.title} theme={route.theme} />
+                        {/* TODO: Add breadcrumbs */}
 
-                      <div className="container-fluid">{route.component}</div>
-                    </Route>
-                  );
-                })}
-                <Redirect from="/" exact to={routes[0].path} />
-              </Switch>
-            </main>
-          </div>
-        </Suspense>
+                        <div className="container-fluid">{route.component}</div>
+                      </Route>
+                    );
+                  })}
+                  <Redirect from="/" exact to={routes[0].path} />
+                </Switch>
+              </main>
+            </div>
+          </Suspense>
+        </NotificationsProvider>
       </LoaderProvider>
     </BrowserRouter>
   );
