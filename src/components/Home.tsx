@@ -14,14 +14,17 @@ import {
   Notification
 } from "../providers/NotificationsProvider";
 import { RadioListModel } from "@sebgroup/react-components/dist/RadioGroup/RadioGroup";
+
 type NotificationRadio = RadioListModel<Notification["theme"]>;
+
 const Home: React.FC = () => {
   const deviceSize: DeviceType = useCommonMedia();
   const isLargeScreenSize: boolean = deviceSize === "wide-desktop";
   const [stepperValue, setStepperValue] = useState<number>(1);
-  const [notificationType, setNotificationType] = useState<
-    Notification["theme"]
-  >("warning");
+  const [notificationType, setNotificationType] = useState<NotificationRadio>({
+    label: "Warning",
+    value: "warning"
+  });
   const [notificationTypeList] = useState<NotificationRadio[]>([
     { label: "Warning", value: "warning" },
     { label: "Error", value: "danger" }
@@ -56,17 +59,26 @@ const Home: React.FC = () => {
   const handleSendNotification = useCallback(
     () =>
       addNotification({
-        message: (notificationType as string).toUpperCase(),
+        message: notificationType.label,
         description: notificationMessage,
-        theme: notificationType
+        theme: notificationType.value
       }),
     [addNotification, notificationMessage, notificationType]
   );
 
   const handleChangeNotificationType = useCallback(
-    (change: React.ChangeEvent<HTMLInputElement>) =>
-      setNotificationType(change.target.value as Notification["theme"]),
-    [setNotificationType]
+    (change: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = change.target;
+      if (value) {
+        const selectedItem:
+          | NotificationRadio
+          | undefined = notificationTypeList.find(item => item.value === value);
+        if (selectedItem) {
+          setNotificationType(selectedItem);
+        }
+      }
+    },
+    [setNotificationType, notificationTypeList]
   );
 
   return (
@@ -134,7 +146,7 @@ const Home: React.FC = () => {
             label="Notification type:"
             list={notificationTypeList}
             onChange={handleChangeNotificationType}
-            value={notificationType}
+            value={notificationType.value}
           />
         </div>
       </div>
