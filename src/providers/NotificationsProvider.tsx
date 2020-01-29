@@ -56,7 +56,7 @@ const NotificationsProvider: React.FC = props => {
               aria-atomic="true"
             >
               <strong className="text-break">{notification.message}</strong>
-              <div className="text-muted">{notification.description}</div>
+              <div>{notification.description}</div>
               <button
                 onClick={() => removeNotificationAtIndex(index)}
                 type="button"

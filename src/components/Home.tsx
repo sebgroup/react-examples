@@ -1,10 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Button } from "@sebgroup/react-components/dist/Button";
-import { Dropdown } from "@sebgroup/react-components/dist/Dropdown";
-import {
-  DropdownItem,
-  DropdownChangeEvent
-} from "@sebgroup/react-components/dist/Dropdown/Dropdown";
+import { RadioGroup } from "@sebgroup/react-components/dist/RadioGroup";
 import { TextBox } from "@sebgroup/react-components/dist/TextBox";
 import { Stepper } from "@sebgroup/react-components/dist/Stepper";
 import {
@@ -17,20 +13,16 @@ import {
   UseNotificationsContext,
   Notification
 } from "../providers/NotificationsProvider";
-
+import { RadioListModel } from "@sebgroup/react-components/dist/RadioGroup/RadioGroup";
+type NotificationRadio = RadioListModel<Notification["theme"]>;
 const Home: React.FC = () => {
   const deviceSize: DeviceType = useCommonMedia();
   const isLargeScreenSize: boolean = deviceSize === "wide-desktop";
   const [stepperValue, setStepperValue] = useState<number>(1);
   const [notificationType, setNotificationType] = useState<
-    DropdownItem<Notification["theme"]>
-  >({
-    label: "Warning",
-    value: "warning"
-  });
-  const [notificationTypeList] = useState<
-    DropdownItem<Notification["theme"]>[]
-  >([
+    Notification["theme"]
+  >("warning");
+  const [notificationTypeList] = useState<NotificationRadio[]>([
     { label: "Warning", value: "warning" },
     { label: "Error", value: "danger" }
   ]);
@@ -64,15 +56,16 @@ const Home: React.FC = () => {
   const handleSendNotification = useCallback(
     () =>
       addNotification({
-        message: notificationType.label,
+        message: (notificationType as string).toUpperCase(),
         description: notificationMessage,
-        theme: notificationType.value
+        theme: notificationType
       }),
     [addNotification, notificationMessage, notificationType]
   );
 
   const handleChangeNotificationType = useCallback(
-    (item: DropdownChangeEvent) => setNotificationType(item as DropdownItem),
+    (change: React.ChangeEvent<HTMLInputElement>) =>
+      setNotificationType(change.target.value as Notification["theme"]),
     [setNotificationType]
   );
 
@@ -135,11 +128,13 @@ const Home: React.FC = () => {
             value={notificationMessage}
             onChange={onChangeNotificationMessage}
           />
-          <Dropdown
+          <RadioGroup
+            inline
+            name="notificationType"
             label="Notification type:"
             list={notificationTypeList}
             onChange={handleChangeNotificationType}
-            selectedValue={notificationType}
+            value={notificationType}
           />
         </div>
       </div>
