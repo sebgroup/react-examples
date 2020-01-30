@@ -6,21 +6,17 @@ export interface LoaderContextInterface {
   toggleLoading: () => void;
 }
 
-export type UseLoaderContext = [
-  LoaderContextInterface["loading"],
-  LoaderContextInterface["toggleLoading"]
-];
+export type UseLoaderContext = [LoaderContextInterface["loading"], LoaderContextInterface["toggleLoading"]];
 
-export const LoaderContext: React.Context<LoaderContextInterface> = createContext<
-  LoaderContextInterface
->({ loading: false, toggleLoading: () => {} });
+export const LoaderContext: React.Context<LoaderContextInterface> = createContext<LoaderContextInterface>({
+  loading: false,
+  toggleLoading: () => {}
+});
 
-const LoaderProvider: React.FC = props => {
-  const [loading, setLoading] = useState<LoaderContextInterface["loading"]>(
-    false
-  );
+const LoaderProvider: React.FC = (props) => {
+  const [loading, setLoading] = useState<LoaderContextInterface["loading"]>(false);
   const toggleLoading: LoaderContextInterface["toggleLoading"] = () => {
-    setLoading(state => !state);
+    setLoading((state) => !state);
   };
 
   return (

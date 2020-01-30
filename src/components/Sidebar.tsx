@@ -8,23 +8,14 @@ interface SidebarProps {
   searchable: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  routes,
-  mobile,
-  searchable
-}: SidebarProps) => {
+const Sidebar: React.FC<SidebarProps> = ({ routes, mobile, searchable }: SidebarProps) => {
   const [open, setOpen] = useState(false);
-  const toggleClickMenu = useCallback(() => setOpen(state => !state), []);
+  const toggleClickMenu = useCallback(() => setOpen((state) => !state), []);
 
-  const Separator: React.FC<{ type: "mb" | "mt" | "my" }> = memo(({ type }) => (
-    <hr className={`m-0 ${type}-3`} />
-  ));
+  const Separator: React.FC<{ type: "mb" | "mt" | "my" }> = memo(({ type }) => <hr className={`m-0 ${type}-3`} />);
 
   return (
-    <aside
-      style={{ gridArea: "aside", zIndex: 1 }}
-      className="bg-dark overflow-auto"
-    >
+    <aside style={{ gridArea: "aside", zIndex: 1 }} className="bg-dark overflow-auto">
       <nav className="navbar navbar-dark bg-dark sidebar-header">
         <span className="navbar-brand">React starter</span>
         {mobile ? (

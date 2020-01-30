@@ -10,27 +10,20 @@ export interface NotificationsContextInterface {
   addNotification: (notification: Notification) => void;
 }
 
-export type UseNotificationsContext = [
-  NotificationsContextInterface["addNotification"]
-];
+export type UseNotificationsContext = [NotificationsContextInterface["addNotification"]];
 
 export const NotificationsContext: React.Context<NotificationsContextInterface> = createContext<
   NotificationsContextInterface
 >({ addNotification: () => {} });
 
-const NotificationsProvider: React.FC = props => {
+const NotificationsProvider: React.FC = (props) => {
   const [notifications, setNotification] = useState<Notification[]>([]);
-  const addNotification: NotificationsContextInterface["addNotification"] = (
-    notification: Notification
-  ) => {
-    setNotification(state => [...state, notification]);
+  const addNotification: NotificationsContextInterface["addNotification"] = (notification: Notification) => {
+    setNotification((state) => [...state, notification]);
   };
 
   const removeNotificationAtIndex = (index: number) => {
-    setNotification([
-      ...notifications.slice(0, index),
-      ...notifications.slice(index + 1)
-    ]);
+    setNotification([...notifications.slice(0, index), ...notifications.slice(index + 1)]);
   };
 
   return (
@@ -39,11 +32,7 @@ const NotificationsProvider: React.FC = props => {
         addNotification
       }}
     >
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        className="notifications-container"
-      >
+      <div aria-live="polite" aria-atomic="true" className="notifications-container">
         {notifications.map((notification: Notification, index: number) => {
           return (
             <div

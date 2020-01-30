@@ -61,10 +61,7 @@ const App: React.FC = () => {
     }
   }, [deviceSize]);
 
-  const mobile: boolean = useMemo(
-    () => deviceSize === "mobile" || deviceSize === "landscape-mobile",
-    [deviceSize]
-  );
+  const mobile: boolean = useMemo(() => deviceSize === "mobile" || deviceSize === "landscape-mobile", [deviceSize]);
 
   const rootContainerStyle = {
     display: "grid",
@@ -95,10 +92,7 @@ const App: React.FC = () => {
           <LoaderProvider>
             <NotificationsProvider>
               <Suspense fallback={<AppLoading />}>
-                <div
-                  className={"root-container bg-light"}
-                  style={rootContainerStyle}
-                >
+                <div className={"root-container bg-light"} style={rootContainerStyle}>
                   <Sidebar mobile={mobile} routes={routes} searchable />
                   <main style={{ gridArea: "main", overflowY: "auto" }}>
                     <Switch>
@@ -108,9 +102,7 @@ const App: React.FC = () => {
                             <Header d3={route.title} theme={route.theme} />
                             {/* TODO: Add breadcrumbs */}
 
-                            <div className="container-fluid">
-                              {route.component}
-                            </div>
+                            <div className="container-fluid">{route.component}</div>
                           </Route>
                         );
                       })}

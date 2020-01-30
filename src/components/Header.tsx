@@ -11,16 +11,7 @@ export interface HeaderProps {
   theme?: "primary" | "secondary" | "success" | "info" | "warning" | "danger";
 }
 
-const Header: React.FC<HeaderProps> = ({
-  d1,
-  d2,
-  d3,
-  h1,
-  h2,
-  h3,
-  lead,
-  theme
-}) => {
+const Header: React.FC<HeaderProps> = ({ d1, d2, d3, h1, h2, h3, lead, theme }) => {
   const getClassNameForTheme: () => {
     container: string;
     text: string;
@@ -28,10 +19,7 @@ const Header: React.FC<HeaderProps> = ({
     if (theme) {
       return {
         container: `jumbotron bg-${theme}-element`,
-        text:
-          theme === "secondary" || theme === "warning"
-            ? "text-dark"
-            : "text-light"
+        text: theme === "secondary" || theme === "warning" ? "text-dark" : "text-light"
       };
     }
 
