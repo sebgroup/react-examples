@@ -5,6 +5,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { HeaderProps } from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
+import NoMatch from "./components/NoMatch";
 import LoaderProvider from "./providers/LoaderProvider";
 import NotificationsProvider from "./providers/NotificationsProvider";
 
@@ -85,33 +86,44 @@ const App: React.FC = () => {
   return (
     // TODO: add global notifications as Context
     <BrowserRouter>
-      <LoaderProvider>
-        <NotificationsProvider>
-          <Suspense fallback={<AppLoading />}>
-            <div
-              className={"root-container bg-light"}
-              style={rootContainerStyle}
-            >
-              <Sidebar mobile={mobile} routes={routes} searchable />
-              <main style={{ gridArea: "main", overflowY: "auto" }}>
-                <Switch>
-                  {routes.map((route: AppRouteConfig) => {
-                    return (
-                      <Route key={route.path} path={route.path}>
-                        <Header d3={route.title} theme={route.theme} />
-                        {/* TODO: Add breadcrumbs */}
+      <Switch>
+        <Route path="/nomatch">
+          <NoMatch />
+        </Route>
 
-                        <div className="container-fluid">{route.component}</div>
-                      </Route>
-                    );
-                  })}
-                  <Redirect from="/" exact to={routes[0].path} />
-                </Switch>
-              </main>
-            </div>
-          </Suspense>
-        </NotificationsProvider>
-      </LoaderProvider>
+        <Route path="*">
+          <LoaderProvider>
+            <NotificationsProvider>
+              <Suspense fallback={<AppLoading />}>
+                <div
+                  className={"root-container bg-light"}
+                  style={rootContainerStyle}
+                >
+                  <Sidebar mobile={mobile} routes={routes} searchable />
+                  <main style={{ gridArea: "main", overflowY: "auto" }}>
+                    <Switch>
+                      {routes.map((route: AppRouteConfig) => {
+                        return (
+                          <Route key={route.path} path={route.path}>
+                            <Header d3={route.title} theme={route.theme} />
+                            {/* TODO: Add breadcrumbs */}
+
+                            <div className="container-fluid">
+                              {route.component}
+                            </div>
+                          </Route>
+                        );
+                      })}
+                      <Redirect from="/" exact to={routes[0].path} />
+                      <Redirect from="*" to={"/nomatch"} />
+                    </Switch>
+                  </main>
+                </div>
+              </Suspense>
+            </NotificationsProvider>
+          </LoaderProvider>
+        </Route>
+      </Switch>
     </BrowserRouter>
   );
 };
