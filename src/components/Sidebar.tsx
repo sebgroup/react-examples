@@ -21,7 +21,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   ));
 
   return (
-    <aside style={{ gridArea: "aside" }} className="bg-dark overflow-auto">
+    <aside
+      style={{ gridArea: "aside", zIndex: 1 }}
+      className="bg-dark overflow-auto"
+    >
       <nav className="navbar navbar-dark bg-dark sidebar-header">
         <span className="navbar-brand">React starter</span>
         {mobile ? (
