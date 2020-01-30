@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const NoMatch: React.FC = () => {
   const sidebarHeaderHeight: number = 56;
@@ -71,7 +72,7 @@ const NoMatch: React.FC = () => {
                   unexpected
                 </p>
                 <hr />
-                <button className="btn btn-link">Option 1</button>
+                <NavLink to={"/"}>Go back home</NavLink>
               </div>
               <div className="col-sm">
                 <hr />

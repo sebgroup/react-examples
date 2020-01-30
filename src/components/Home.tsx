@@ -14,6 +14,7 @@ import {
   Notification
 } from "../providers/NotificationsProvider";
 import { RadioListModel } from "@sebgroup/react-components/dist/RadioGroup/RadioGroup";
+import { NavLink } from "react-router-dom";
 
 type NotificationRadio = RadioListModel<Notification["theme"]>;
 
@@ -148,6 +149,21 @@ const Home: React.FC = () => {
             onChange={handleChangeNotificationType}
             value={notificationType.value}
           />
+        </div>
+      </div>
+
+      <div className="card mb-3">
+        <div className="card-body">
+          <h3 className="card-title">Error Pages</h3>
+          <h6 className="card-subtitle mb-2 text-muted">Global error Pages</h6>
+          <p className="card-text">
+            The app includes global error pages to handle 404 and other errors.
+          </p>
+          <p className="text-muted">
+            The below link will navigate you to a fake url which will trigger
+            the router to redirect you to the 404 page
+          </p>
+          <NavLink to={"/fake/path"}>Test 404</NavLink>
         </div>
       </div>
     </div>
