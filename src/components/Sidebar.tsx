@@ -1,6 +1,7 @@
 import React, { useState, useCallback, memo } from "react";
 import { NavLink } from "react-router-dom";
 import { AppRouteConfig } from "../App";
+import { useLanguageContext } from "../providers/LanguageProvider";
 
 interface SidebarProps {
   routes: Array<AppRouteConfig>;
@@ -9,6 +10,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ routes, mobile, searchable }: SidebarProps) => {
+  const [{ appName, routeNames }] = useLanguageContext();
   const [open, setOpen] = useState(false);
   const toggleClickMenu = useCallback(() => setOpen((state) => !state), []);
 
@@ -17,7 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, mobile, searchable }: Sidebar
   return (
     <aside style={{ gridArea: "aside", zIndex: 1 }} className="bg-dark overflow-auto">
       <nav className="navbar navbar-dark bg-dark sidebar-header">
-        <span className="navbar-brand">React starter</span>
+        <span className="navbar-brand">{appName}</span>
         {mobile ? (
           <button
             className="navbar-toggler"
@@ -63,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes, mobile, searchable }: Sidebar
                   activeClassName="text-dark bg-secondary"
                   onClick={toggleClickMenu}
                 >
-                  {item.title}
+                  {routeNames[item.title]}
                 </NavLink>
               </li>
             ))}

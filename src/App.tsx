@@ -8,12 +8,15 @@ import Header from "./components/Header";
 import NoMatch from "./components/NoMatch";
 import LoaderProvider from "./providers/LoaderProvider";
 import NotificationsProvider from "./providers/NotificationsProvider";
+import LanguageProvider from "./providers/LanguageProvider";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+import { AppLanguage } from "./models/language";
 
 const Home = lazy(() => import("./components/Home"));
 
 export interface AppRouteConfig {
   path: string;
-  title: string;
+  title: keyof AppLanguage["routeNames"];
   component: React.ReactNode;
   theme?: HeaderProps["theme"];
 }
@@ -22,13 +25,13 @@ const App: React.FC = () => {
   const deviceSize: DeviceType = useCommonMedia();
 
   const routes: Array<AppRouteConfig> = [
-    { path: "/home", title: "Home", component: <Home />, theme: "success" },
+    { path: "/home", title: "home", component: <Home />, theme: "success" },
     {
       path: "/components",
-      title: "Components",
+      title: "components",
       component: <div>COMPONENTS</div>
     },
-    { path: "/about", title: "About", component: <div>ABOUT</div> }
+    { path: "/about", title: "about", component: <div>ABOUT</div> }
   ];
   const sidebarHeaderHeight: number = 56;
 
@@ -81,42 +84,41 @@ const App: React.FC = () => {
   );
 
   return (
-    // TODO: add global notifications as Context
-    <BrowserRouter>
-      <Switch>
-        <Route path="/nomatch">
-          <NoMatch />
-        </Route>
+    <LanguageProvider>
+      <LanguageSwitcher />
+      <BrowserRouter>
+        <Switch>
+          <Route path="/nomatch">
+            <NoMatch />
+          </Route>
 
-        <Route path="*">
-          <LoaderProvider>
-            <NotificationsProvider>
-              <Suspense fallback={<AppLoading />}>
-                <div className={"root-container bg-light"} style={rootContainerStyle}>
-                  <Sidebar mobile={mobile} routes={routes} searchable />
-                  <main style={{ gridArea: "main", overflowY: "auto" }}>
-                    <Switch>
-                      {routes.map((route: AppRouteConfig) => {
-                        return (
-                          <Route key={route.path} path={route.path}>
-                            <Header d3={route.title} theme={route.theme} />
-                            {/* TODO: Add breadcrumbs */}
-
-                            <div className="container-fluid">{route.component}</div>
-                          </Route>
-                        );
-                      })}
-                      <Redirect from="/" exact to={routes[0].path} />
-                      <Redirect from="*" to={"/nomatch"} />
-                    </Switch>
-                  </main>
-                </div>
-              </Suspense>
-            </NotificationsProvider>
-          </LoaderProvider>
-        </Route>
-      </Switch>
-    </BrowserRouter>
+          <Route path="*">
+            <LoaderProvider>
+              <NotificationsProvider>
+                <Suspense fallback={<AppLoading />}>
+                  <div className={"root-container bg-light"} style={rootContainerStyle}>
+                    <Sidebar mobile={mobile} routes={routes} searchable />
+                    <main style={{ gridArea: "main", overflowY: "auto" }}>
+                      <Switch>
+                        {routes.map((route: AppRouteConfig) => {
+                          return (
+                            <Route key={route.path} path={route.path}>
+                              {route.component}
+                            </Route>
+                          );
+                        })}
+                        <Redirect from="/" exact to={routes[0].path} />
+                        <Redirect from="*" to={"/nomatch"} />
+                      </Switch>
+                    </main>
+                  </div>
+                </Suspense>
+              </NotificationsProvider>
+            </LoaderProvider>
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 };
 
