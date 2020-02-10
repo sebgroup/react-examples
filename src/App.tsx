@@ -12,7 +12,7 @@ import LanguageProvider from "./providers/LanguageProvider";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import { AppLanguage } from "./models/language";
 
-const Home = lazy(() => import("./components/Home"));
+const Home = lazy(() => import("./components/home/Home"));
 
 export interface AppRouteConfig {
   path: string;
