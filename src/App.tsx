@@ -100,9 +100,9 @@ const App: React.FC = () => {
                     <Sidebar mobile={mobile} routes={routes} searchable />
                     <main style={{ gridArea: "main", overflowY: "auto" }}>
                       <Switch>
-                        {routes.map((route: AppRouteConfig) => {
+                        {routes.map((route: AppRouteConfig, i: number) => {
                           return (
-                            <Route key={route.path} path={route.path}>
+                            <Route key={i} path={route.path}>
                               {route.component}
                             </Route>
                           );
