@@ -1,22 +1,25 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useLanguageContext } from "../../../providers/LanguageProvider";
+import { HashLink } from "react-router-hash-link";
 
 const PagesCard: React.FC = () => {
   // LANGUAGE ==============================
   // context
   const [{ components }] = useLanguageContext();
-  const cardsLanguage = components.home.cards;
+  const language = components.home.cards.pages;
 
   // RENDER =+=+=+=+=+=+=+=+=+=+=+=
   return (
-    <div className="card mb-3">
+    <div id="errorpages" className="card mb-3">
       <div className="card-body">
-        <h3 className="card-title">{cardsLanguage.pages.title}</h3>
-        <h6 className="card-subtitle mb-2 text-muted">{cardsLanguage.pages.subtitle}</h6>
-        <p className="card-text">{cardsLanguage.pages.description}</p>
-        <p className="text-muted">{cardsLanguage.pages.note}</p>
-        <NavLink to={"/fake/path"}>{cardsLanguage.pages.buttonTexts ? cardsLanguage.pages.buttonTexts[0] : ""}</NavLink>
+        <HashLink smooth to="#errorpages">
+          <h3 className="card-title">{language.title}</h3>
+        </HashLink>
+        <h6 className="card-subtitle mb-2 text-muted">{language.subtitle}</h6>
+        <p className="card-text">{language.description}</p>
+        <p className="text-muted">{language.note}</p>
+        <NavLink to={"/fake/path"}>{language.buttonTexts ? language.buttonTexts[0] : ""}</NavLink>
       </div>
     </div>
   );

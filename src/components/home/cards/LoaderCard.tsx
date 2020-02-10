@@ -3,6 +3,7 @@ import { Button } from "@sebgroup/react-components/dist/Button";
 import { Stepper } from "@sebgroup/react-components/dist/Stepper";
 import { useLoaderContext, UseLoaderContext } from "../../../providers/LoaderProvider";
 import { useLanguageContext } from "../../../providers/LanguageProvider";
+import { HashLink } from "react-router-hash-link";
 
 const LoaderCard: React.FC = () => {
   // LANGUAGE ==============================
@@ -26,9 +27,11 @@ const LoaderCard: React.FC = () => {
 
   // RENDER =+=+=+=+=+=+=+=+=+=+=+=
   return (
-    <div className="card mb-3">
+    <div id="loader" className="card mb-3">
       <div className="card-body">
-        <h3 className="card-title">{language.title}</h3>
+        <HashLink smooth to="#loader">
+          <h3 className="card-title">{language.title}</h3>
+        </HashLink>
         <h6 className="card-subtitle mb-2 text-muted">{language.subtitle}</h6>
         <p className="card-text">{language.description}</p>
         <Button

@@ -9,6 +9,7 @@ import {
   Notification
 } from "../../../providers/NotificationsProvider";
 import { useLanguageContext } from "../../../providers/LanguageProvider";
+import { HashLink } from "react-router-hash-link";
 
 type NotificationRadio = RadioListModel<Notification["theme"]>;
 
@@ -87,9 +88,11 @@ const NotificationsCard: React.FC = () => {
 
   // RENDER =+=+=+=+=+=+=+=+=+=+=+=
   return (
-    <div className="card mb-3">
+    <div id="notifications" className="card mb-3">
       <div className="card-body">
-        <h3 className="card-title">{language.title}</h3>
+        <HashLink smooth to="#notifications">
+          <h3 className="card-title">{language.title}</h3>
+        </HashLink>
         <h6 className="card-subtitle mb-2 text-muted">{language.subtitle}</h6>
         <p className="card-text">{language.description}</p>
         <Button
