@@ -1,5 +1,5 @@
 export interface DynamicFormItem {
-  key?: string;
+  key: string;
   value?: any;
   label?: string | null;
   required?: boolean;
@@ -27,7 +27,7 @@ export type DynamicFormType =
 
 export interface DynamicFormSection {
   title?: string | null;
-  key?: string;
+  key: string;
   order?: number;
   multi?: boolean;
   items?: Array<DynamicFormItem> | null;
@@ -36,6 +36,6 @@ export interface DynamicFormSection {
 export interface DynamicFormOption {
   value?: any;
   label?: string | null;
-  key?: string;
+  key: string;
   disabled?: boolean | null;
 }
