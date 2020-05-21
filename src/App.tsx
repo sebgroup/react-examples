@@ -13,6 +13,7 @@ import LanguageSwitcher from "./components/LanguageSwitcher";
 import { AppLanguage } from "./models/language";
 
 const Home = lazy(() => import("./components/home/Home"));
+const Components = lazy(() => import("./components/components/Components"));
 
 export interface AppRouteConfig {
   path: string;
@@ -29,7 +30,7 @@ const App: React.FC = () => {
     {
       path: "/components",
       title: "components",
-      component: <div>COMPONENTS</div>
+      component: <Components />
     },
     { path: "/about", title: "about", component: <div>ABOUT</div> }
   ];
