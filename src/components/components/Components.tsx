@@ -30,9 +30,11 @@ const Components: React.FC = () => {
 
   const sections: DynamicFormSection[] = example;
 
-  const getState = (s: any) => {
-    console.log("NEW STATE: ", s);
-  };
+  // const getState = (s: any) => {
+  //   console.log("NEW STATE: ", s);
+  // };
+
+  const [formState, setFormState] = useDynamicForm(sections);
 
   // RENDER =+=+=+=+=+=+=+=+=+=+=+=
   return (
@@ -40,7 +42,7 @@ const Components: React.FC = () => {
       <ComponentsHeader />
 
       <div className="container-fluid">
-        <DynamicFormComponent sections={sections} getState={getState} />
+        <DynamicFormComponent sections={sections} state={formState} onChange={setFormState} />
       </div>
     </Suspense>
   );
@@ -58,22 +60,18 @@ interface DynamicFormInternalStateSection {
 interface DynamicFormInternalState {
   [k: string]: DynamicFormInternalStateSection;
 }
-const DynamicFormComponent: React.FC<{
-  sections: DynamicFormSection[];
-  getState: (state: DynamicFormInternalState) => void;
-}> = (props) => {
+
+function useDynamicForm(
+  sections: DynamicFormSection[]
+): [DynamicFormInternalState, (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => void] {
   const initialState: DynamicFormInternalState = {};
-  props.sections?.map((section) => {
+  sections?.map((section) => {
     initialState[section?.key] = {};
     section.items?.map((item) => {
       initialState[section?.key][item?.key] = item?.value;
     });
   });
   const [state, setState] = useState<DynamicFormInternalState>(initialState);
-
-  useEffect(() => {
-    props.getState(state);
-  }, [props.getState, state]);
 
   const onChangeForItem = (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
     // console.log(section, item, (e as any).target.value);
@@ -117,9 +115,7 @@ const DynamicFormComponent: React.FC<{
       }
       case "Datepicker": {
         const targetDate: Date = e as Date;
-        console.log(targetDate);
         if (targetDate) {
-          console.log("hi");
           newValue = {
             year: targetDate.getFullYear(),
             month: targetDate.getMonth() + 1,
@@ -135,7 +131,7 @@ const DynamicFormComponent: React.FC<{
       }
     }
 
-    console.log("newValue: ", newValue);
+    // console.log("newValue: ", newValue);
 
     setState({
       ...state,
@@ -146,6 +142,14 @@ const DynamicFormComponent: React.FC<{
     });
   };
 
+  return [state, onChangeForItem];
+}
+
+const DynamicFormComponent: React.FC<{
+  sections: DynamicFormSection[];
+  state: DynamicFormInternalState;
+  onChange: (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => void;
+}> = (props) => {
   return (
     <>
       {props.sections?.map((section, i) => (
@@ -154,8 +158,8 @@ const DynamicFormComponent: React.FC<{
           <DynamicFormSectionComponent
             key={i}
             section={section}
-            onChange={onChangeForItem(section)}
-            state={state && state.hasOwnProperty(section.key) ? state[section.key] : null}
+            onChange={props.onChange(section)}
+            state={props.state && props.state.hasOwnProperty(section.key) ? props.state[section.key] : null}
           />
         </React.Fragment>
       ))}
