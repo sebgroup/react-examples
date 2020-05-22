@@ -30,11 +30,9 @@ const Components: React.FC = () => {
 
   const sections: DynamicFormSection[] = example;
 
-  // const getState = (s: any) => {
-  //   console.log("NEW STATE: ", s);
-  // };
-
   const [formState, setFormState] = useDynamicForm(sections);
+
+  // console.log(formState);
 
   // RENDER =+=+=+=+=+=+=+=+=+=+=+=
   return (
@@ -50,7 +48,11 @@ const Components: React.FC = () => {
 
 type DynamicFormDate = { day: number; month: number; year: number };
 
-type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | DropdownChangeEvent | Date;
+type InputChange =
+  | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  | DropdownChangeEvent
+  | Date;
 
 type DynamicFormInternalStateValue = string | DynamicFormOption | DynamicFormOption[] | DynamicFormDate | null;
 
@@ -85,6 +87,7 @@ function useDynamicForm(
       case "TextArea":
         newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
         break;
+      case "Option":
       case "Checkbox": {
         let newOptions: DynamicFormOption[] = [...((sectionState[item.key] as DynamicFormOption[]) || [])];
         // console.log("target: ", (e as any).target);
@@ -192,47 +195,24 @@ const DynamicFormItemComponent: React.FC<{
   state: DynamicFormInternalStateValue | null;
 }> = (props) => {
   const controlType: DynamicFormType = props.item?.controlType || "Text";
+  const commonProps: { name: string; label: string; onChange: (...args: any) => void } = {
+    label: props.item?.label || "",
+    name: props.item?.key || "",
+    onChange: props.onChange
+  };
 
   switch (controlType) {
     case "TextArea":
-      return (
-        <>
-          <TextArea
-            label={props.item?.label || ""}
-            value={(props.state as string) || ""}
-            name={props.item?.key || ""}
-            onChange={props.onChange}
-          />
-        </>
-      );
+      return <TextArea {...commonProps} value={(props.state as string) || ""} />;
     case "Text":
-      return (
-        <>
-          <TextBox
-            label={props.item?.label || ""}
-            value={(props.state as string) || ""}
-            name={props.item?.key || ""}
-            onChange={props.onChange}
-          />
-        </>
-      );
+      return <TextBox {...commonProps} value={(props.state as string) || ""} />;
 
     case "Radio": {
       const list: RadioListModel[] =
         props.item?.options?.map((option) => {
           return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
         }) || [];
-      return (
-        <>
-          <RadioGroup
-            name={props.item?.key || ""}
-            label={props.item?.label || ""}
-            value={(props.state as DynamicFormOption)?.value || ""}
-            list={list}
-            onChange={props.onChange}
-          />
-        </>
-      );
+      return <RadioGroup {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} />;
     }
 
     case "Dropdown": {
@@ -242,16 +222,12 @@ const DynamicFormItemComponent: React.FC<{
         }) || [];
 
       return (
-        <>
-          <Dropdown
-            name={props.item?.key || ""}
-            label={props.item?.label || ""}
-            multi={props.item?.multi}
-            selectedValue={props.state as DropdownItem | DropdownItem[]}
-            list={list}
-            onChange={props.onChange}
-          />
-        </>
+        <Dropdown
+          {...commonProps}
+          multi={props.item?.multi}
+          selectedValue={props.state as DropdownItem | DropdownItem[]}
+          list={list}
+        />
       );
     }
 
@@ -284,14 +260,31 @@ const DynamicFormItemComponent: React.FC<{
       value.setDate(day);
       value.setFullYear(year);
       value.setMonth(month - 1);
+      return <Datepicker {...commonProps} value={value} />;
+    }
+
+    case "Option": {
       return (
         <>
-          <Datepicker
-            label={props.item?.label || ""}
-            value={value}
-            name={props.item?.key || ""}
-            onChange={props.onChange}
-          />
+          <label>{props.item?.label}</label>
+          <div className="d-flex flex-wrap" role="group">
+            {props.item?.options?.map((option, i) => {
+              const active: boolean = !!(props.state as DynamicFormOption[])?.find((o) => option.key === o.key)?.value;
+              return (
+                <button
+                  key={i}
+                  onClick={props.onChange}
+                  type="button"
+                  id={option.key}
+                  name={props.item?.key}
+                  disabled={!!option.disabled}
+                  className={`btn btn-sm mr-1 mb-1 btn-outline-primary${active ? " active" : ""}`}
+                >
+                  {option?.label}
+                </button>
+              );
+            })}
+          </div>
         </>
       );
     }
