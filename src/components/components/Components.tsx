@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect } from "react";
+import React, { Suspense, useState, ReactNode, useMemo, useCallback } from "react";
 import Header from "../Header";
 import { useLanguageContext } from "../../providers/LanguageProvider";
 import { DynamicFormItem, DynamicFormType, DynamicFormSection, DynamicFormOption } from "../../models/dynamic-form";
@@ -30,7 +30,7 @@ const Components: React.FC = () => {
 
   const sections: DynamicFormSection[] = example;
 
-  const [formState, setFormState] = useDynamicForm(sections);
+  const [formState, setFormState, shouldRender] = useDynamicForm(sections);
 
   // console.log(formState);
 
@@ -40,7 +40,12 @@ const Components: React.FC = () => {
       <ComponentsHeader />
 
       <div className="container-fluid">
-        <DynamicFormComponent sections={sections} state={formState} onChange={setFormState} />
+        <DynamicFormComponent
+          sections={sections}
+          state={formState}
+          onChange={setFormState}
+          shouldRender={shouldRender}
+        />
       </div>
     </Suspense>
   );
@@ -54,104 +59,195 @@ type InputChange =
   | DropdownChangeEvent
   | Date;
 
-type DynamicFormInternalStateValue = string | DynamicFormOption | DynamicFormOption[] | DynamicFormDate | null;
+type DynamicFormInternalStateValue =
+  | string
+  | string[]
+  | DynamicFormOption
+  | DynamicFormOption[]
+  | DynamicFormDate
+  | null;
 
 interface DynamicFormInternalStateSection {
   [k: string]: DynamicFormInternalStateValue;
 }
 interface DynamicFormInternalState {
-  [k: string]: DynamicFormInternalStateSection;
+  [k: string]: DynamicFormInternalStateSection | DynamicFormInternalStateSection[];
 }
+type OnChangeFormSection = (section: DynamicFormSection) => OnChangeFormItem;
+type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
+type OnChangeInput = (e: InputChange) => void;
+type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
 function useDynamicForm(
   sections: DynamicFormSection[]
-): [DynamicFormInternalState, (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => void] {
+): [DynamicFormInternalState, OnChangeFormSection, ShouldRenderFormItem] {
   const initialState: DynamicFormInternalState = {};
   sections?.map((section) => {
     initialState[section?.key] = {};
     section.items?.map((item) => {
-      initialState[section?.key][item?.key] = item?.value;
+      if (Array.isArray(initialState[section?.key])) {
+        // TODO: map through the array and do the same as below for each element
+      } else {
+        const { key, value }: DynamicFormItem = item;
+        (initialState[section?.key] as DynamicFormInternalStateSection)[key] = value;
+      }
     });
   });
   const [state, setState] = useState<DynamicFormInternalState>(initialState);
 
-  const onChangeForItem = (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
-    // console.log(section, item, (e as any).target.value);
+  /**
+   * SHOULD RENDER CONTROL:
+   * Determines if the form control should be rendered or not.
+   * @param sectionKey section key
+   * @param itemKey section key
+   */
+  const shouldRender: ShouldRenderFormItem = useMemo<ShouldRenderFormItem>(
+    () => (sectionKey: string, itemKey: string): boolean => {
+      console.log("should render sectionKey: ", sectionKey, " itemKey: ", itemKey);
+      const { rulerKey, condition, controlType }: Partial<DynamicFormItem> =
+        sections
+          ?.find((item: DynamicFormSection) => item.key === sectionKey)
+          ?.items?.find((item: DynamicFormItem) => item.key === itemKey) || {};
+      // console.log({ rulerKey, condition, controlType });
+      if (controlType === "Hidden") {
+        // Marked as hidden, don't render
+        return false;
+      }
+      if (rulerKey) {
+        const rulerState: DynamicFormInternalStateValue = (state[sectionKey] as DynamicFormInternalStateSection)[
+          rulerKey
+        ];
+        if (rulerState === undefined || condition === undefined) {
+          console.warn("Something went wrong in shouldRenderControl: Ruler value or condition could not be found.");
+          return false;
+        }
 
-    const sectionState = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
-    const controlType: DynamicFormType = item?.controlType || "Text";
-    let newValue: DynamicFormInternalStateValue = null;
-
-    switch (controlType) {
-      case "Text":
-      case "TextArea":
-        newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
-        break;
-      case "Option":
-      case "Checkbox": {
-        let newOptions: DynamicFormOption[] = [...((sectionState[item.key] as DynamicFormOption[]) || [])];
-        // console.log("target: ", (e as any).target);
-        // console.log("newOptions: ", newOptions);
-        const targetId: string = (e as React.ChangeEvent<HTMLInputElement>).target.id;
-        if (newOptions.find((o) => o.key === targetId)) {
-          newOptions = [...newOptions.filter((o) => o.key !== targetId)];
-          // console.log("removing  ...");
-          // console.log(newOptions);
-        } else {
-          const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.key === targetId);
-          if (targetOption) {
-            newOptions.push(targetOption);
-            // console.log("adding  ...");
-            // console.log(newOptions);
+        if (typeof rulerState === "string" && rulerState === (condition as any)) {
+          return shouldRender(sectionKey, rulerKey);
+        } else if (rulerState && condition && typeof condition === "object" && Array.isArray(condition)) {
+          for (const conditionItem of condition as Array<any>) {
+            if (conditionItem) {
+              if (typeof rulerState === "object" && Array.isArray(rulerState)) {
+                for (const rulerValueItem of rulerState as Array<any>) {
+                  if (
+                    rulerValueItem &&
+                    rulerValueItem.value === conditionItem.value &&
+                    rulerValueItem.key === conditionItem.key
+                  ) {
+                    return shouldRender(sectionKey, rulerKey);
+                  }
+                }
+              } else if (typeof rulerState === "object" && !Array.isArray(rulerState)) {
+                if (
+                  rulerState &&
+                  (rulerState as DynamicFormOption)?.value === conditionItem.value &&
+                  (rulerState as DynamicFormOption)?.key === conditionItem.key
+                ) {
+                  return shouldRender(sectionKey, rulerKey);
+                }
+              }
+            }
           }
+        } else if (
+          rulerState &&
+          typeof rulerState === "object" &&
+          !Array.isArray(rulerState) &&
+          (rulerState as DynamicFormOption)?.value === (condition as DynamicFormOption)?.value
+        ) {
+          return shouldRender(sectionKey, rulerKey);
         }
-        newValue = newOptions;
-        break;
+        return false;
       }
-      case "Radio": {
-        const targetValue: string = (e as React.ChangeEvent<HTMLInputElement>).target.value;
-        const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.value === targetValue);
-        if (targetOption) {
-          newValue = targetOption;
+      return true;
+    },
+    [state, sections]
+  );
+
+  const onChange: OnChangeFormSection = useCallback<OnChangeFormSection>(
+    (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
+      // console.log(section, item, (e as any).target.value);
+
+      // TODO: Add support for DynamicFormInternalStateSection as array
+      const sectionState: DynamicFormInternalStateSection | DynamicFormInternalStateSection[] =
+        state && state.hasOwnProperty(section.key) ? state[section.key] : {};
+      const controlType: DynamicFormType = item?.controlType || "Text";
+      let newValue: DynamicFormInternalStateValue = null;
+
+      switch (controlType) {
+        case "Text":
+        case "TextArea":
+          newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
+          break;
+        case "Option":
+        case "Checkbox": {
+          let newOptions: DynamicFormOption[] = [
+            ...(((sectionState as DynamicFormInternalStateSection)[item.key] as DynamicFormOption[]) || [])
+          ];
+          // console.log("target: ", (e as any).target);
+          // console.log("newOptions: ", newOptions);
+          const targetId: string = (e as React.ChangeEvent<HTMLInputElement>).target.id;
+          if (newOptions.find((o) => o.key === targetId)) {
+            newOptions = [...newOptions.filter((o) => o.key !== targetId)];
+            // console.log("removing  ...");
+            // console.log(newOptions);
+          } else {
+            const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.key === targetId);
+            if (targetOption) {
+              newOptions.push(targetOption);
+              // console.log("adding  ...");
+              // console.log(newOptions);
+            }
+          }
+          newValue = newOptions;
+          break;
         }
-        break;
-      }
-      case "Datepicker": {
-        const targetDate: Date = e as Date;
-        if (targetDate) {
-          newValue = {
-            year: targetDate.getFullYear(),
-            month: targetDate.getMonth() + 1,
-            day: targetDate.getDate()
-          } as DynamicFormDate;
+        case "Radio": {
+          const targetValue: string = (e as React.ChangeEvent<HTMLInputElement>).target.value;
+          const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.value === targetValue);
+          if (targetOption) {
+            newValue = targetOption;
+          }
+          break;
         }
-        break;
+        case "Datepicker": {
+          const targetDate: Date = e as Date;
+          if (targetDate) {
+            newValue = {
+              year: targetDate.getFullYear(),
+              month: targetDate.getMonth() + 1,
+              day: targetDate.getDate()
+            } as DynamicFormDate;
+          }
+          break;
+        }
+
+        default: {
+          newValue = e as DynamicFormItem | DynamicFormItem[];
+          break;
+        }
       }
 
-      default: {
-        newValue = e as DynamicFormItem | DynamicFormItem[];
-        break;
-      }
-    }
+      // console.log("newValue: ", newValue);
 
-    // console.log("newValue: ", newValue);
+      setState({
+        ...state,
+        [section.key]: {
+          ...sectionState,
+          [item.key]: newValue
+        }
+      });
+    },
+    [state]
+  );
 
-    setState({
-      ...state,
-      [section.key]: {
-        ...sectionState,
-        [item.key]: newValue
-      }
-    });
-  };
-
-  return [state, onChangeForItem];
+  return [state, onChange, shouldRender];
 }
 
 const DynamicFormComponent: React.FC<{
   sections: DynamicFormSection[];
   state: DynamicFormInternalState;
-  onChange: (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => void;
+  onChange: OnChangeFormSection;
+  shouldRender: ShouldRenderFormItem;
 }> = (props) => {
   return (
     <>
@@ -161,6 +257,7 @@ const DynamicFormComponent: React.FC<{
           <DynamicFormSectionComponent
             key={i}
             section={section}
+            shouldRender={props.shouldRender}
             onChange={props.onChange(section)}
             state={props.state && props.state.hasOwnProperty(section.key) ? props.state[section.key] : null}
           />
@@ -172,27 +269,40 @@ const DynamicFormComponent: React.FC<{
 
 const DynamicFormSectionComponent: React.FC<{
   section: DynamicFormSection;
-  onChange: (item: DynamicFormItem) => (e: InputChange) => void;
-  state: DynamicFormInternalStateSection | null;
+  state: DynamicFormInternalStateSection | DynamicFormInternalStateSection[] | null;
+  onChange: OnChangeFormItem;
+  shouldRender: ShouldRenderFormItem;
 }> = (props) => {
+  // TODO: Add support for array type state
   return (
-    <div className="form-group">
-      {props.section?.items?.map((item, i) => (
-        <DynamicFormItemComponent
-          key={i}
-          item={item}
-          onChange={props.onChange(item)}
-          state={props.state && props.state.hasOwnProperty(item.key) ? props.state[item.key] : null}
-        />
-      ))}
-    </div>
+    <>
+      <div className="form-group container">
+        {props.section?.items?.map((item, i) => {
+          if (props.shouldRender(props.section.key, item.key)) {
+            return (
+              <DynamicFormItemComponent
+                key={i}
+                item={item}
+                onChange={props.onChange(item)}
+                state={
+                  props.state && props.state.hasOwnProperty(item.key)
+                    ? (props.state as DynamicFormInternalStateSection)[item.key]
+                    : null
+                }
+              />
+            );
+          }
+        })}
+      </div>
+      <hr />
+    </>
   );
 };
 
 const DynamicFormItemComponent: React.FC<{
   item: DynamicFormItem;
-  onChange: (e: InputChange) => void;
   state: DynamicFormInternalStateValue | null;
+  onChange: OnChangeInput;
 }> = (props) => {
   const controlType: DynamicFormType = props.item?.controlType || "Text";
   const commonProps: { name: string; label: string; onChange: (...args: any) => void } = {
@@ -201,18 +311,25 @@ const DynamicFormItemComponent: React.FC<{
     onChange: props.onChange
   };
 
+  let formItem: ReactNode;
+
   switch (controlType) {
-    case "TextArea":
-      return <TextArea {...commonProps} value={(props.state as string) || ""} />;
-    case "Text":
-      return <TextBox {...commonProps} value={(props.state as string) || ""} />;
+    case "TextArea": {
+      formItem = <TextArea {...commonProps} value={(props.state as string) || ""} />;
+      break;
+    }
+    case "Text": {
+      formItem = <TextBox {...commonProps} value={(props.state as string) || ""} />;
+      break;
+    }
 
     case "Radio": {
       const list: RadioListModel[] =
         props.item?.options?.map((option) => {
           return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
         }) || [];
-      return <RadioGroup {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} />;
+      formItem = <RadioGroup {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} />;
+      break;
     }
 
     case "Dropdown": {
@@ -221,7 +338,7 @@ const DynamicFormItemComponent: React.FC<{
           return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
         }) || [];
 
-      return (
+      formItem = (
         <Dropdown
           {...commonProps}
           multi={props.item?.multi}
@@ -229,6 +346,7 @@ const DynamicFormItemComponent: React.FC<{
           list={list}
         />
       );
+      break;
     }
 
     case "Checkbox": {
@@ -244,7 +362,7 @@ const DynamicFormItemComponent: React.FC<{
             disabled: !!option.disabled
           };
         }) || [];
-      return (
+      formItem = (
         <>
           <label>{props.item?.label}</label>
           {list.map((item, i) => (
@@ -252,6 +370,7 @@ const DynamicFormItemComponent: React.FC<{
           ))}
         </>
       );
+      break;
     }
 
     case "Datepicker": {
@@ -260,11 +379,12 @@ const DynamicFormItemComponent: React.FC<{
       value.setDate(day);
       value.setFullYear(year);
       value.setMonth(month - 1);
-      return <Datepicker {...commonProps} value={value} />;
+      formItem = <Datepicker {...commonProps} value={value} />;
+      break;
     }
 
     case "Option": {
-      return (
+      formItem = (
         <>
           <label>{props.item?.label}</label>
           <div className="d-flex flex-wrap" role="group">
@@ -287,16 +407,25 @@ const DynamicFormItemComponent: React.FC<{
           </div>
         </>
       );
+      break;
     }
 
     default:
-      return (
+      formItem = (
         <div>
           <label>{props.item?.label}</label>
           {" ---- "}
         </div>
       );
+      break;
   }
+
+  return (
+    <>
+      {formItem}
+      <hr />
+    </>
+  );
 };
 
 export default Components;
