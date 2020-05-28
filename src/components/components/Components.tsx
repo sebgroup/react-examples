@@ -328,7 +328,9 @@ const DynamicFormItemComponent: React.FC<{
         props.item?.options?.map((option) => {
           return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
         }) || [];
-      formItem = <RadioGroup {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} />;
+      formItem = (
+        <RadioGroup condensed {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} />
+      );
       break;
     }
 
@@ -366,7 +368,7 @@ const DynamicFormItemComponent: React.FC<{
         <>
           <label>{props.item?.label}</label>
           {list.map((item, i) => (
-            <CheckBox key={i} {...item} />
+            <CheckBox key={i} {...item} condensed />
           ))}
         </>
       );
