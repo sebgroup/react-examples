@@ -39,3 +39,5 @@ export interface DynamicFormOption {
   key: string;
   disabled?: boolean | null;
 }
+
+export type DynamicFormDate = { day: number; month: number; year: number };
