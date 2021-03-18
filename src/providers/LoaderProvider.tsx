@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-import { Loader } from "@sebgroup/react-components/dist/Loader";
+import { Loader } from "@sebgroup/react-components";
 
 export interface LoaderContextInterface {
   loading: boolean;
