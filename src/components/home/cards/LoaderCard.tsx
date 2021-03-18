@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { Button } from "@sebgroup/react-components/dist/Button";
-import { Stepper } from "@sebgroup/react-components/dist/Stepper";
+import { Button } from "@sebgroup/react-components";
+import { Stepper } from "@sebgroup/react-components";
 import { useLoaderContext, UseLoaderContext } from "../../../providers/LoaderProvider";
 import { useLanguageContext } from "../../../providers/LanguageProvider";
 import { HashLink } from "react-router-hash-link";
@@ -34,11 +34,9 @@ const LoaderCard: React.FC = () => {
         </HashLink>
         <h6 className="card-subtitle mb-2 text-muted">{language.subtitle}</h6>
         <p className="card-text">{language.description}</p>
-        <Button
-          className="card-link mb-3"
-          label={language.buttonTexts ? language.buttonTexts[0] : ""}
-          onClick={() => triggerLoader(stepperValue)}
-        ></Button>
+        <Button className="card-link mb-3" onClick={() => triggerLoader(stepperValue)}>
+          {language.buttonTexts ? language.buttonTexts[0] : ""}
+        </Button>
         <hr />
         <p className="card-text">{language.footerMessage}</p>
         <Stepper
