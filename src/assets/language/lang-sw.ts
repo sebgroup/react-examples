@@ -5,6 +5,7 @@ const swedish: AppLanguage = {
   routeNames: {
     home: "Hem",
     components: "Komponenter",
+    wizard: "Trollkarl",
     about: "Handla om"
   },
   components: {

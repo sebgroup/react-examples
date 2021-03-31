@@ -3,6 +3,7 @@ export interface AppLanguage {
   routeNames: {
     home: string;
     components: string;
+    wizard: string;
     about: string;
   };
   components: {

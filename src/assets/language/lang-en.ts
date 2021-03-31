@@ -5,6 +5,7 @@ const english: AppLanguage = {
   routeNames: {
     home: "Home",
     components: "Components",
+    wizard: "Wizard",
     about: "About"
   },
   components: {
