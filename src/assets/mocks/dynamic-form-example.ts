@@ -9,22 +9,17 @@ export const example: DynamicFormSection[] = [
       {
         key: "show-second",
         label: "Should I display the second form item?",
-        required: true,
         multi: false,
         order: 10,
-        value: {
-          value: "Yes",
-          label: "Yes please",
-          key: "yes"
-        },
+        value: "no",
         options: [
           {
-            value: "Yes",
+            value: "yes",
             label: "Yes please",
             key: "yes"
           },
           {
-            value: "No",
+            value: "no",
             label: "No thanks",
             key: "no"
           }
@@ -34,21 +29,17 @@ export const example: DynamicFormSection[] = [
       {
         key: "second-item",
         label: "Hi I'm the second item! (try to type hello)",
-        required: false,
         multi: false,
         max: 5,
         order: 20,
         placeholder: "I should only be displayed if you select Yes above!",
         rulerKey: "show-second",
-        condition: {
-          key: "yes"
-        },
+        condition: "yes",
         controlType: "Text"
       },
       {
         key: "third-item",
         label: "Hi I'm the third item!",
-        required: false,
         multi: false,
         order: 30,
         placeholder: "I should only be displayed if you typed hello above!",
@@ -66,7 +57,6 @@ export const example: DynamicFormSection[] = [
       {
         key: "text-area",
         label: "Text area",
-        required: false,
         multi: false,
         max: 100,
         order: 10,
@@ -89,7 +79,6 @@ export const example: DynamicFormSection[] = [
       {
         key: "radio-group",
         label: "Radio group",
-        required: false,
         multi: false,
         order: 25,
         options: [
@@ -114,7 +103,6 @@ export const example: DynamicFormSection[] = [
       {
         key: "dropdown-normal",
         label: "Single select dropdown",
-        required: false,
         multi: false,
         order: 30,
         options: [
@@ -139,7 +127,6 @@ export const example: DynamicFormSection[] = [
       {
         key: "dropdown-multi",
         label: "Multi select dropdown",
-        required: false,
         multi: true,
         order: 40,
         options: [
@@ -170,7 +157,6 @@ export const example: DynamicFormSection[] = [
       {
         key: "options",
         label: "Options",
-        required: false,
         multi: false,
         order: 50,
         options: [
@@ -202,7 +188,6 @@ export const example: DynamicFormSection[] = [
         key: "datepicker",
         value: new Date(),
         label: "Date picker",
-        required: false,
         order: 60,
         controlType: "Datepicker"
       }
