@@ -29,7 +29,7 @@ const App: React.FC = () => {
 
   const routes: Array<AppRouteConfig> = [
     { path: "/home", title: "home", component: <Home />, theme: "success" },
-    { path: "/wizard/a", title: "wizard", component: <Wizard />, theme: "warning" },
+    { path: "/wizard", title: "wizard", component: <Wizard />, theme: "warning" },
     {
       path: "/components",
       title: "components",

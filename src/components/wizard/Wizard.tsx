@@ -1,28 +1,46 @@
 import React, { lazy } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, useRouteMatch, Link } from "react-router-dom";
+import Header from "../Header";
 
 const WizardSectionA = lazy(() => import("./sections/WizardSectionA"));
+const WizardSectionB = lazy(() => import("./sections/WizardSectionB"));
 
 export interface WazardRouteConfig {
   path: string;
-  title: string;
   component: React.ReactNode;
 }
 
 const Wizard: React.FC = () => {
-  const routes: Array<WazardRouteConfig> = [{ path: "/wizard/a", title: "Section A", component: <WizardSectionA /> }];
+  let { path, url } = useRouteMatch();
+
+  const ComponentsHeader = () => <Header d3="Wizard" theme="warning" />;
+
+  const routes: Array<WazardRouteConfig> = [
+    { path: "a", component: <WizardSectionA /> },
+    { path: "b", component: <WizardSectionB /> }
+  ];
 
   return (
     <>
       <Switch>
+        <Route exact path={path}>
+          <ComponentsHeader />
+
+          <div className="container-fluid">
+            <div className="card mb-3">
+              <div className="card-body">
+                <Link to={`${url}/a`}>Start</Link>
+              </div>
+            </div>
+          </div>
+        </Route>
         {routes.map((route: WazardRouteConfig, i: number) => {
           return (
-            <Route key={i} path={route.path}>
+            <Route key={i} path={`${path}/${route.path}`}>
               {route.component}
             </Route>
           );
         })}
-        <Redirect from="*" to={"/nomatch"} />
       </Switch>
     </>
   );

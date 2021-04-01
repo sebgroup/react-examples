@@ -1,30 +1,32 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 type WizardContextSectionType = { [k: string]: any };
 export type WizardContextType = {
   sectionA?: WizardContextSectionType;
   setSectionA: (value: any) => void;
   sectionB?: WizardContextSectionType;
+  setSectionB: (value: any) => void;
   sectionC?: WizardContextSectionType;
 };
 
 export const WizardContext = createContext<WizardContextType>({
   sectionA: {},
-  setSectionA: () => {}
+  setSectionA: () => {},
+  sectionB: {},
+  setSectionB: () => {}
 });
 
 export const WizardProvider: React.FC = ({ children }) => {
   const [sectionA, setSectionA] = useState<WizardContextSectionType>({});
-  useEffect(() => {
-    console.log("changed");
-    console.log(sectionA);
-  }, [sectionA]);
+  const [sectionB, setSectionB] = useState<WizardContextSectionType>({});
 
   return (
     <WizardContext.Provider
       value={{
         sectionA: { ...sectionA },
-        setSectionA: (value: any) => setSectionA(value)
+        setSectionA: (value: any) => setSectionA(value),
+        sectionB: { ...sectionB },
+        setSectionB: (value: any) => setSectionB(value)
       }}
     >
       {children}
