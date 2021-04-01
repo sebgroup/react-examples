@@ -9,7 +9,7 @@ import NoMatch from "./components/NoMatch";
 import LoaderProvider from "./providers/LoaderProvider";
 import NotificationsProvider from "./providers/NotificationsProvider";
 import LanguageProvider from "./providers/LanguageProvider";
-import { WizardProvider } from "./components/wizard/providers/WizardProvider";
+import { WizardProvider } from "./providers/WizardProvider";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import { AppLanguage } from "./models/language";
 

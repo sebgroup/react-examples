@@ -3,7 +3,7 @@ import Header from "../../Header";
 import { example } from "../../../assets/mocks/wizard-page-1-example";
 import { useDynamicForm, DynamicFormSection } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components";
-import { useWizardContext } from "../providers/WizardProvider";
+import { useWizardContext } from "../../../providers/WizardProvider";
 
 const WizardSectionA: React.FC = () => {
   const ComponentsHeader = () => <Header d3="Wizard | Section A" theme="warning" />;
