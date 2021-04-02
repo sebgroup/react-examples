@@ -66,8 +66,9 @@ const WizardSectionB: React.FC<{ sections: DynamicFormSection[] }> = ({ sections
 
         <div className="card mb-3">
           <div className="card-footer">
-            <div className="d-flex my-3 w-100">
+            <div className="d-flex justify-content-between my-3 w-100">
               <Link to="a">Back</Link>
+              <Link to="c">Next</Link>
             </div>
           </div>
         </div>
