@@ -4,6 +4,7 @@ import { example } from "../../../assets/mocks/wizard-page-3-example";
 import { useDynamicForm, DynamicFormSection } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { useWizardContext } from "../../../providers/WizardProvider";
 import { Link } from "react-router-dom";
+import "./WizardSectionC.scss";
 
 const WizardSectionC: React.FC = () => {
   const ComponentsHeader = () => <Header d3="Wizard | Section C" theme="success" />;
@@ -28,7 +29,7 @@ const WizardSectionC: React.FC = () => {
     <>
       <ComponentsHeader />
 
-      <div className="container-fluid">
+      <div className="container-fluid my-special-custom-styles">
         <div className="card mb-3">
           <div className="card-body">{renderForm()}</div>
         </div>

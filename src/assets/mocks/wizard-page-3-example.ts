@@ -2,7 +2,7 @@ import { DynamicFormSection } from "@sebgroup/react-components/hooks/useDynamicF
 
 export const example: DynamicFormSection[] = [
   {
-    title: "I was in the backend",
+    title: "This section has custom styles",
     key: "section-3",
     items: [
       {
