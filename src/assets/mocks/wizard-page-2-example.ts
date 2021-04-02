@@ -2,34 +2,25 @@ import { DynamicFormSection } from "@sebgroup/react-components/hooks/useDynamicF
 
 export const example: DynamicFormSection[] = [
   {
-    title: "Regular section (normal section which can not be multiplied)",
-    key: "section-3",
-    order: 30,
+    title: "I was in the backend",
+    key: "section-2",
+    order: 10,
     items: [
       {
-        key: "text-area",
-        label: "Text area",
-        multi: false,
-        max: 100,
-        order: 10,
-        placeholder: "Hi I'm a placeholder",
-        controlType: "Textarea"
-      },
-      {
-        key: "checkbox-1",
+        key: "checkbox1",
         label: "Prechecked checkbox",
-        order: 20,
+        order: 10,
         value: true,
         controlType: "Checkbox"
       },
       {
         key: "checkbox2",
         label: "Unchecked checkbox",
-        order: 21,
+        order: 20,
         controlType: "Checkbox"
       },
       {
-        key: "radio-group",
+        key: "radiogroup",
         label: "Radio group",
         multi: false,
         order: 25,
@@ -80,6 +71,7 @@ export const example: DynamicFormSection[] = [
         key: "dropdown-multi",
         label: "Multi select dropdown",
         multi: true,
+        value: [],
         order: 40,
         options: [
           {
@@ -135,13 +127,6 @@ export const example: DynamicFormSection[] = [
           }
         ],
         controlType: "Option"
-      },
-      {
-        key: "datepicker",
-        value: new Date(),
-        label: "Date picker",
-        order: 60,
-        controlType: "Datepicker"
       }
     ]
   }
