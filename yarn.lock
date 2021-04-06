@@ -1528,10 +1528,10 @@
   resolved "https://registry.npmjs.org/@sebgroup/frontend-tools/-/frontend-tools-2.0.2.tgz"
   integrity sha512-nrDMnC8Nb152MJsKFrpYjgCrvjon3fT9sbJs1t3GChYrsHhjRwkC4JEWHAiRPOyQ6CoIkNaOYwrTNQfe6tTznA==
 
-"@sebgroup/react-components@^5.0.0-beta.8":
-  version "5.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@sebgroup/react-components/-/react-components-5.0.0-beta.8.tgz#4be6b8d6fdd453ed357a3bb264cd856d599b625c"
-  integrity sha512-dwzSpWnSrNcpvZ6+fyFsUA6yDfkULLFMj9s0vKr9E7OKdB6vSvJPkT981obA+A3RMdYoEd2NCm0wTCa94a1GbA==
+"@sebgroup/react-components@^5.0.0-beta.10":
+  version "5.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@sebgroup/react-components/-/react-components-5.0.0-beta.10.tgz#dcc6144785ee63b5ab95a5dced699e564055b0a6"
+  integrity sha512-httySx8xBf5WasMM/uqslomm2ysX48aIPXJzXkwIlVGxA3kiVfwFWKJvAkgly86ezMneb0Him4Cm09JamgsrGA==
   dependencies:
     "@sebgroup/frontend-tools" "^2.0.2"
     classnames "^2.2.6"
