@@ -20,6 +20,15 @@ export const example: DynamicFormSection[] = [
         controlType: "Checkbox"
       },
       {
+        key: "checkbox3",
+        label: "Disabled checkbox",
+        order: 20,
+        controlType: "Checkbox",
+        additionalProps: {
+          disabled: true
+        }
+      },
+      {
         key: "radiogroup",
         label: "Radio group",
         multi: false,
@@ -39,6 +48,14 @@ export const example: DynamicFormSection[] = [
             value: "value 3",
             label: "Label 3",
             key: "key-3"
+          },
+          {
+            value: "value 4",
+            label: "Disabled example",
+            key: "key-4",
+            additionalProps: {
+              disabled: true
+            }
           }
         ],
         controlType: "Radio"
@@ -63,6 +80,14 @@ export const example: DynamicFormSection[] = [
             value: "value 3",
             label: "Label 3",
             key: "key-3"
+          },
+          {
+            value: "value 4",
+            label: "Disabled example",
+            key: "key-4",
+            additionalProps: {
+              disabled: true
+            }
           }
         ],
         controlType: "Dropdown"
@@ -93,7 +118,9 @@ export const example: DynamicFormSection[] = [
             value: "value 4",
             label: "Disabled example",
             key: "key-4",
-            disabled: true
+            additionalProps: {
+              disabled: true
+            }
           }
         ],
         controlType: "Dropdown"
@@ -123,7 +150,9 @@ export const example: DynamicFormSection[] = [
             value: "value 4",
             label: "Disabled example",
             key: "key-4",
-            disabled: true
+            additionalProps: {
+              disabled: true
+            }
           }
         ],
         controlType: "Option"
