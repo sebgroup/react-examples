@@ -7,6 +7,14 @@ export const example: DynamicFormSection[] = [
     order: 10,
     items: [
       {
+        key: "label-only",
+        label: "Here's some examples of multi and single select form elements for selecting different options.",
+        description:
+          "(I'm an example of a label only element, you can put me anywhere you like in the form as general info.)",
+        order: 0,
+        controlType: "LabelOnly"
+      },
+      {
         key: "checkbox1",
         label: "Prechecked checkbox",
         order: 10,
