@@ -5,6 +5,7 @@ import Header from "../Header";
 const WizardSectionA = lazy(() => import("./sections/WizardSectionA"));
 const WizardSectionB = lazy(() => import("./sections/WizardSectionB"));
 const WizardSectionC = lazy(() => import("./sections/WizardSectionC"));
+const WizardSectionD = lazy(() => import("./sections/WizardSectionD"));
 
 export interface WazardRouteConfig {
   path: string;
@@ -19,7 +20,8 @@ const Wizard: React.FC = () => {
   const routes: Array<WazardRouteConfig> = [
     { path: "a", component: <WizardSectionA /> },
     { path: "b", component: <WizardSectionB /> },
-    { path: "c", component: <WizardSectionC /> }
+    { path: "c", component: <WizardSectionC /> },
+    { path: "d", component: <WizardSectionD /> }
   ];
 
   return (
