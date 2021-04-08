@@ -16,12 +16,22 @@ export const example: DynamicFormSection[] = [
           {
             value: "yes",
             label: "Yes please",
-            key: "yes"
+            key: "yes",
+            additionalProps: {
+              wrapperProps: {
+                className: "d-inline-block"
+              }
+            }
           },
           {
             value: "no",
             label: "No thanks",
-            key: "no"
+            key: "no",
+            additionalProps: {
+              wrapperProps: {
+                className: "d-inline-block"
+              }
+            }
           }
         ],
         controlType: "Radio"
