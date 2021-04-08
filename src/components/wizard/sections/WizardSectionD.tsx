@@ -10,7 +10,7 @@ const WizardSectionD: React.FC = () => {
   const ComponentsHeader = () => <Header d3="Wizard | Section D" theme="primary" />;
   const { setSectionD, sectionD } = useWizardContext();
 
-  const sections: DynamicFormSection[] = example;
+  const sections: DynamicFormSection[] = example("en");
 
   const [renderForm, formState, setFormState] = useDynamicForm(sections);
 
@@ -30,9 +30,9 @@ const WizardSectionD: React.FC = () => {
       <ComponentsHeader />
 
       <div className="container-fluid">
-        <div className="card mb-3">
-          <div className="card-body">{renderForm()}</div>
-        </div>
+        <h2>This section includes an example dynamically generated sections based on different input</h2>
+        <p className="pl-3 ml-3 text-muted mb-3">Check the code for more info</p>
+        <>{renderForm()}</>
 
         <div className="card mb-3">
           <div className="card-footer">
