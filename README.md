@@ -19,6 +19,10 @@
   - Example on handling global loaders and notifications
   - Example of a Wizard utlizing [SEB React components' Dynamic Forms](https://sebgroup.github.io/react-components/docs/dynamic-forms) and [React.Context](https://reactjs.org/docs/context.html).
 
+## Please create issues with suggestions of examples you would like to see
+
+# Clone it and run it locally to use as a playground
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
