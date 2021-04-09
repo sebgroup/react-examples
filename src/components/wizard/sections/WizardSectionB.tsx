@@ -21,7 +21,7 @@ const WizardSectionBLoading: React.FC = () => {
         <WizardSectionB sections={sections} />
       ) : (
         <>
-          <Header d3="Wizard" theme="danger" />
+          <Header h3="Wizard | Section B" d3="loading...." theme="danger" />
           <div className="container-fluid">
             <div className="card mb-3">
               <div className="card-body">

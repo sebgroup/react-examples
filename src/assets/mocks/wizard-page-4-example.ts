@@ -59,6 +59,7 @@ const makeSections = (locale: string): DynamicFormSection[] => {
           ? {
               ...e,
               additionalProps: {
+                ...(e.additionalProps || {}),
                 wrapperProps: {
                   style: {
                     width: 250

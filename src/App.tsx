@@ -30,12 +30,16 @@ const App: React.FC = () => {
   const routes: Array<AppRouteConfig> = [
     { path: "/home", title: "home", component: <Home />, theme: "success" },
     { path: "/wizard", title: "wizard", component: <Wizard />, theme: "warning" },
+    // {
+    //   path: "/components",
+    //   title: "components",
+    //   component: <Components />
+    // },
     {
-      path: "/components",
-      title: "components",
-      component: <Components />
-    },
-    { path: "/about", title: "about", component: <div>ABOUT</div> }
+      path: "/about",
+      title: "about",
+      component: <Header d3="About" lead="TODO: Add about section ...." theme="info" />
+    }
   ];
   const sidebarHeaderHeight: number = 56;
 

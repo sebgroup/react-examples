@@ -8,9 +8,8 @@ export const example: DynamicFormSection[] = [
     items: [
       {
         key: "label-only",
-        label: "Here's some examples of multi and single select form elements for selecting different options.",
-        description:
-          "(I'm an example of a label only element, you can put me anywhere you like in the form as general info.)",
+        label: "I'm an example of a label only element, you can put me anywhere you like in the form as general info.",
+        description: "And I'm the description.",
         order: 0,
         controlType: "LabelOnly"
       },

@@ -24,7 +24,7 @@ const english: AppLanguage = {
           title: "Notifications",
           subtitle: "Global application notifications",
           description:
-            "The app includes a global notification system. An react component can trigger a notification from enywhere withing the tree.",
+            "Any react component can simply trigger a notification. If multiple notifications are triggered they appear stacked. This stack is configured for max 10 notifications but can be changed.",
           buttonTexts: ["Test notification"],
           footerMessage: "Adjust the notification message and type:",
           message: "Notification message:",

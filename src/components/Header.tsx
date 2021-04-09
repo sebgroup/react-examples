@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ d1, d2, d3, h1, h2, h3, lead, theme }) 
 
     return {
       container: `jumbotron`,
-      text: "text-cark"
+      text: "text-light"
     };
   }, [theme]);
 
@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ d1, d2, d3, h1, h2, h3, lead, theme }) 
       {lead ? (
         <>
           <hr className="my-4" />
-          <p className="lead">{lead}</p>
+          <p className={`lead m-0 ${themeClassName.text}`}>{lead}</p>
         </>
       ) : null}
     </section>

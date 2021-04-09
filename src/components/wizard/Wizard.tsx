@@ -15,7 +15,13 @@ export interface WazardRouteConfig {
 const Wizard: React.FC = () => {
   let { path, url } = useRouteMatch();
 
-  const ComponentsHeader = () => <Header d3="Wizard" theme="warning" />;
+  const ComponentsHeader = () => (
+    <Header
+      theme="warning"
+      d3="Wizard"
+      lead="An example of a wizard using dynamic forms and react context apis. Press Start to begin."
+    />
+  );
 
   const routes: Array<WazardRouteConfig> = [
     { path: "a", component: <WizardSectionA /> },
