@@ -2,6 +2,7 @@
   "name": "seb-react-starter",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://sebgroup.github.io/react-examples",
   "dependencies": {
     "@sebgroup/bootstrap": "^5.1.0",
     "@sebgroup/react-components": "^5.0.0-beta.10",
@@ -30,7 +31,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^3.1.0",
     "sass": "^1.32.8"
   },
   "lint-staged": {
