@@ -13,6 +13,7 @@
 
 - and it includes:
   - General skeleton layout according to SEB design
+  - Simple language switcher using a mock language resourse
   - SEB styled Error pages
   - Examples of how to handle in app routes with sidebar navigation
   - Example on handling global loaders and notifications
