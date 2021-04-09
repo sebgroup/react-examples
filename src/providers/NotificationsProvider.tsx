@@ -1,9 +1,10 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, PropsWithChildren } from "react";
+import { NotificationProps, Notification } from "@sebgroup/react-components/Notification";
 
 export interface Notification {
   message: string;
   description: string;
-  theme?: "danger" | "warning";
+  theme?: NotificationProps["theme"];
 }
 
 export interface NotificationsContextInterface {
@@ -16,7 +17,10 @@ export const NotificationsContext: React.Context<NotificationsContextInterface> 
   NotificationsContextInterface
 >({ addNotification: () => {} });
 
-const NotificationsProvider: React.FC = (props) => {
+const NotificationsProvider: React.FC<PropsWithChildren<{ maxNotifications?: number }>> = ({
+  maxNotifications = 10,
+  children
+}) => {
   const [notifications, setNotification] = useState<Notification[]>([]);
   const addNotification: NotificationsContextInterface["addNotification"] = (notification: Notification) => {
     setNotification((state) => [...state, notification]);
@@ -26,40 +30,42 @@ const NotificationsProvider: React.FC = (props) => {
     setNotification([...notifications.slice(0, index), ...notifications.slice(index + 1)]);
   };
 
+  React.useEffect(() => {
+    if (notifications.length > maxNotifications) {
+      removeNotificationAtIndex(0);
+    }
+  }, [notifications, maxNotifications]);
+
   return (
     <NotificationsContext.Provider
       value={{
         addNotification
       }}
     >
-      <div aria-live="polite" aria-atomic="true" className="notifications-container">
-        {notifications.map((notification: Notification, index: number) => {
-          return (
-            <div
-              key={index}
-              className={`toast alert alert-${
-                notification.theme ? notification.theme : "warning"
-              } alert-dismissible fade show`}
-              role="alert"
-              aria-live="assertive"
-              aria-atomic="true"
+      {notifications.map((notification: Notification, index: number) => {
+        const ref = React.createRef<HTMLDivElement>();
+        return (
+          <React.Fragment key={index}>
+            <Notification
+              id={`notification-${index}`}
+              ref={ref}
+              persist
+              toggle
+              theme={notification.theme}
+              onDismiss={() => removeNotificationAtIndex(index)}
+              onAnimationEnd={() => {
+                const multiplyer: number = 10;
+                (ref.current as HTMLDivElement).style.animation = `notificationAnimation 200ms ease-in-out`;
+                (ref.current as HTMLDivElement).style.bottom = `${index === 0 ? "20px" : (index + 2) * multiplyer}px`;
+              }}
             >
-              <strong className="text-break">{notification.message}</strong>
-              <div>{notification.description}</div>
-              <button
-                onClick={() => removeNotificationAtIndex(index)}
-                type="button"
-                className="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          );
-        })}
-      </div>
-      {props.children}
+              <div className="notification-header">{notification.message}</div>
+              <div className="notification-body">{notification.description}</div>
+            </Notification>
+          </React.Fragment>
+        );
+      })}
+      {children}
     </NotificationsContext.Provider>
   );
 };
