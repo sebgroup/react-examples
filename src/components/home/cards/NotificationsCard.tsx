@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { Button } from "@sebgroup/react-components";
 import { useLanguageContext } from "../../../providers/LanguageProvider";
 import { HashLink } from "react-router-hash-link";

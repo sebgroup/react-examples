@@ -1,0 +1,42 @@
+.my-special-custom-styles {
+  .card {
+    border-radius: 1rem;
+    .card-body {
+      h4 {
+        font-family: monospace;
+        font-weight: bolder;
+        font-size: xx-large;
+      }
+
+      label {
+        color: salmon;
+        font-size: x-large;
+        padding: 1rem 0;
+        font-style: italic;
+      }
+
+      .rc.input-box-group > .input-group {
+        width: 60%;
+        > .input-box-group-wrapper > input.form-control {
+          background-color: salmon;
+          &::placeholder {
+            color: white;
+          }
+        }
+      }
+
+      .text-muted {
+        width: 60%;
+        margin-top: 0.5rem !important;
+        border-radius: 0.5rem;
+        padding: 0.25rem;
+        text-align: center;
+        background-color: lightgreen;
+      }
+    }
+
+    .card-footer {
+      border-top: none;
+    }
+  }
+}

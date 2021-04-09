@@ -9,10 +9,12 @@ import NoMatch from "./components/NoMatch";
 import LoaderProvider from "./providers/LoaderProvider";
 import NotificationsProvider from "./providers/NotificationsProvider";
 import LanguageProvider from "./providers/LanguageProvider";
+import { WizardProvider } from "./providers/WizardProvider";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import { AppLanguage } from "./models/language";
 
 const Home = lazy(() => import("./components/home/Home"));
+const Wizard = lazy(() => import("./components/wizard/Wizard"));
 const Components = lazy(() => import("./components/components/Components"));
 
 export interface AppRouteConfig {
@@ -27,6 +29,7 @@ const App: React.FC = () => {
 
   const routes: Array<AppRouteConfig> = [
     { path: "/home", title: "home", component: <Home />, theme: "success" },
+    { path: "/wizard", title: "wizard", component: <Wizard />, theme: "warning" },
     {
       path: "/components",
       title: "components",
@@ -86,39 +89,41 @@ const App: React.FC = () => {
 
   return (
     <LanguageProvider>
-      <LanguageSwitcher />
-      <BrowserRouter>
-        <Switch>
-          <Route path="/nomatch">
-            <NoMatch />
-          </Route>
+      <WizardProvider>
+        <LanguageSwitcher />
+        <BrowserRouter>
+          <Switch>
+            <Route path="/nomatch">
+              <NoMatch />
+            </Route>
 
-          <Route path="*">
-            <LoaderProvider>
-              <NotificationsProvider>
-                <Suspense fallback={<AppLoading />}>
-                  <div className={"root-container bg-light"} style={rootContainerStyle}>
-                    <Sidebar mobile={mobile} routes={routes} searchable />
-                    <main style={{ gridArea: "main", overflowY: "auto" }}>
-                      <Switch>
-                        {routes.map((route: AppRouteConfig, i: number) => {
-                          return (
-                            <Route key={i} path={route.path}>
-                              {route.component}
-                            </Route>
-                          );
-                        })}
-                        <Redirect from="/" exact to={routes[0].path} />
-                        <Redirect from="*" to={"/nomatch"} />
-                      </Switch>
-                    </main>
-                  </div>
-                </Suspense>
-              </NotificationsProvider>
-            </LoaderProvider>
-          </Route>
-        </Switch>
-      </BrowserRouter>
+            <Route path="*">
+              <LoaderProvider>
+                <NotificationsProvider>
+                  <Suspense fallback={<AppLoading />}>
+                    <div className={"root-container bg-light"} style={rootContainerStyle}>
+                      <Sidebar mobile={mobile} routes={routes} searchable />
+                      <main style={{ gridArea: "main", overflowY: "auto" }}>
+                        <Switch>
+                          {routes.map((route: AppRouteConfig, i: number) => {
+                            return (
+                              <Route key={i} path={route.path}>
+                                {route.component}
+                              </Route>
+                            );
+                          })}
+                          <Redirect from="/" exact to={routes[0].path} />
+                          <Redirect from="*" to={"/nomatch"} />
+                        </Switch>
+                      </main>
+                    </div>
+                  </Suspense>
+                </NotificationsProvider>
+              </LoaderProvider>
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </WizardProvider>
     </LanguageProvider>
   );
 };
