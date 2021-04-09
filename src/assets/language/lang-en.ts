@@ -1,7 +1,7 @@
 import { AppLanguage } from "../../models/language";
 
 const english: AppLanguage = {
-  appName: "React starter",
+  appName: "React examples",
   routeNames: {
     home: "Home",
     components: "Components",

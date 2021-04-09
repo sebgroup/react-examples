@@ -1,7 +1,7 @@
 import { AppLanguage } from "../../models/language";
 
 const swedish: AppLanguage = {
-  appName: "React självstart",
+  appName: "React exempel",
   routeNames: {
     home: "Hem",
     components: "Komponenter",
