@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import Header from "../../Header";
-import { example } from "../../../assets/mocks/wizard-page-3-example";
+import Header from "../../../Header";
+import { example } from "../../../../assets/mocks/wizard-page-3-example";
 import { useDynamicForm, DynamicFormSection } from "@sebgroup/react-components/hooks/useDynamicForm";
-import { useWizardContext } from "../../../providers/WizardProvider";
+import { useWizardContext } from "../../../../providers/WizardProvider";
 import { Link } from "react-router-dom";
 import "./WizardSectionC.scss";
 

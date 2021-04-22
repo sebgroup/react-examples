@@ -10,6 +10,8 @@ export type WizardContextType = {
   setSectionC: (value: any) => void;
   sectionD?: WizardContextSectionType;
   setSectionD: (value: any) => void;
+  sectionE?: WizardContextSectionType;
+  setSectionE: React.Dispatch<React.SetStateAction<WizardContextSectionType>>;
 };
 
 export const WizardContext = createContext<WizardContextType>({
@@ -20,7 +22,9 @@ export const WizardContext = createContext<WizardContextType>({
   sectionC: {},
   setSectionC: () => {},
   sectionD: {},
-  setSectionD: () => {}
+  setSectionD: () => {},
+  sectionE: {},
+  setSectionE: () => {}
 });
 
 export const WizardProvider: React.FC = ({ children }) => {
@@ -28,6 +32,7 @@ export const WizardProvider: React.FC = ({ children }) => {
   const [sectionB, setSectionB] = useState<WizardContextSectionType>({});
   const [sectionC, setSectionC] = useState<WizardContextSectionType>({});
   const [sectionD, setSectionD] = useState<WizardContextSectionType>({});
+  const [sectionE, setSectionE] = useState<WizardContextSectionType>({});
 
   return (
     <WizardContext.Provider
@@ -39,7 +44,9 @@ export const WizardProvider: React.FC = ({ children }) => {
         sectionC: { ...sectionC },
         setSectionC: (value: any) => setSectionC(value),
         sectionD: { ...sectionD },
-        setSectionD: (value: any) => setSectionD(value)
+        setSectionD: (value: any) => setSectionD(value),
+        sectionE: { ...sectionE },
+        setSectionE
       }}
     >
       {children}

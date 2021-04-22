@@ -36,8 +36,9 @@ const WizardSectionD: React.FC = () => {
 
         <div className="card mb-3">
           <div className="card-footer">
-            <div className="d-flex my-3 w-100">
+            <div className="d-flex justify-content-between my-3 w-100">
               <Link to="c">Back</Link>
+              <Link to="e">Next</Link>
             </div>
           </div>
         </div>
