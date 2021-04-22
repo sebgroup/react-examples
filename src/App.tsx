@@ -95,7 +95,7 @@ const App: React.FC = () => {
     <LanguageProvider>
       <WizardProvider>
         <LanguageSwitcher />
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL || ""}>
           <Switch>
             <Route path="/nomatch">
               <NoMatch />

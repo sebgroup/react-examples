@@ -1511,9 +1511,9 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@sebgroup/bootstrap@^5.1.0":
+"@sebgroup/bootstrap@^5.4.1":
   version "5.4.1"
-  resolved "https://registry.npmjs.org/@sebgroup/bootstrap/-/bootstrap-5.4.1.tgz"
+  resolved "https://registry.yarnpkg.com/@sebgroup/bootstrap/-/bootstrap-5.4.1.tgz#f9540f306e2536e94af6076d910c41a846c1da23"
   integrity sha512-qn5YJ4I1Bm13HtNQJbAcEXP8jE1mObO9Y5+1/T2ot9swVw84NUVrF/VOnjmgAqKKF4v9NMHbz/W5aXn060jvbA==
   dependencies:
     "@sebgroup/fonts" "^1.0.0"
@@ -1528,10 +1528,10 @@
   resolved "https://registry.npmjs.org/@sebgroup/frontend-tools/-/frontend-tools-2.0.2.tgz"
   integrity sha512-nrDMnC8Nb152MJsKFrpYjgCrvjon3fT9sbJs1t3GChYrsHhjRwkC4JEWHAiRPOyQ6CoIkNaOYwrTNQfe6tTznA==
 
-"@sebgroup/react-components@^5.0.0-beta.10":
-  version "5.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@sebgroup/react-components/-/react-components-5.0.0-beta.10.tgz#dcc6144785ee63b5ab95a5dced699e564055b0a6"
-  integrity sha512-httySx8xBf5WasMM/uqslomm2ysX48aIPXJzXkwIlVGxA3kiVfwFWKJvAkgly86ezMneb0Him4Cm09JamgsrGA==
+"@sebgroup/react-components@^5.0.0-beta.11":
+  version "5.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@sebgroup/react-components/-/react-components-5.0.0-beta.11.tgz#8fb53bb14a65ba825f77528d3756edde32f176ea"
+  integrity sha512-Nc5nsm+UFyIAgu5cIOKxq/4K4MuYQMEDcDqybl9P96w5iR7D4wWV2wXbL2W86RfKAhm+xXmcurxPMvqYSpe22Q==
   dependencies:
     "@sebgroup/frontend-tools" "^2.0.2"
     classnames "^2.2.6"
