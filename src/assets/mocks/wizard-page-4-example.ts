@@ -26,7 +26,10 @@ const makeOptions = (locale: string): DynamicFormOption[] => {
       label: capitalize(month),
       description: `${month} - description`,
       additionalProps: {
-        disabled: month === "disabled"
+        disabled: month === "disabled",
+        wrapperProps: {
+          className: "col-12 col-lg-6"
+        }
       }
     };
 
@@ -34,52 +37,39 @@ const makeOptions = (locale: string): DynamicFormOption[] => {
   });
 };
 
-const makeSections = (locale: string): DynamicFormSection[] => {
+const makeSection = (locale: string): DynamicFormSection => {
   const types: DynamicFormType[] = ["Radio", "Dropdown", "Option"];
 
-  const commonExtraProps: { [k: string]: any } = {
-    className: "card p-3 mb-3"
-  };
-
-  return types.map((controlType: DynamicFormType, i: number) => {
-    const item: DynamicFormItem = {
+  const items: DynamicFormItem[] = types.map((controlType: DynamicFormType, i: number) => {
+    return {
       controlType,
       key: `${controlType}-${i}-item`,
       label: `${controlType} label example`,
       description: `${controlType} description example`,
       placeholder: "Please select month",
-      additionalProps:
+      wrappingElement: "div",
+      additionalProps: {
+        className: "card p-3 mb-3"
+      },
+      formElementAdditionalProps:
         controlType === "Radio"
           ? {
-              className: "d-flex flex-wrap align-items-between"
+              className: "d-flex flex-wrap px-3"
             }
           : {},
-      options: [...makeOptions(locale)].map((e) => {
-        return controlType === "Radio"
-          ? {
-              ...e,
-              additionalProps: {
-                ...(e.additionalProps || {}),
-                wrapperProps: {
-                  style: {
-                    width: 250
-                  }
-                }
-              }
-            }
-          : e;
-      })
-    };
-
-    return {
-      key: `${controlType}-${i}-section`,
-      order: i,
-      title: `${controlType} section`,
-      items: [item],
-      wrappingElement: "section",
-      additionalProps: { ...commonExtraProps }
+      options: [...makeOptions(locale)]
     };
   });
+
+  return {
+    key: `section`,
+    items: [...items],
+    wrappingElement: "section",
+    additionalProps: {
+      className: "card-columns",
+      style: { columnCount: 2 }
+    }
+  };
 };
 
-export const example = (locale: string): DynamicFormSection[] => makeSections(locale);
+export const example = (locale: string): DynamicFormSection[] => [makeSection(locale)];

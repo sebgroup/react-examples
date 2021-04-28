@@ -31,7 +31,7 @@ export const example: DynamicFormSection[] = [
         label: "Disabled checkbox",
         order: 20,
         controlType: "Checkbox",
-        additionalProps: {
+        formElementAdditionalProps: {
           disabled: true
         }
       }

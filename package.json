@@ -5,7 +5,7 @@
   "homepage": "https://sebgroup.github.io/react-examples",
   "dependencies": {
     "@sebgroup/bootstrap": "^5.4.1",
-    "@sebgroup/react-components": "^5.0.0-beta.11",
+    "@sebgroup/react-components": "^5.0.0-beta.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
